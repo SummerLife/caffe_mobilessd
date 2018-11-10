@@ -27,6 +27,7 @@ class BaseConvolutionLayer : public Layer<Dtype> {
   virtual inline int MinBottomBlobs() const { return 1; }
   virtual inline int MinTopBlobs() const { return 1; }
   virtual inline bool EqualNumBottomTopBlobs() const { return true; }
+  virtual inline bool return_bias_term_() const {return bias_term_ ;}
 
  protected:
   // Helper functions that abstract away the column buffer and gemm arguments.
@@ -93,7 +94,7 @@ class BaseConvolutionLayer : public Layer<Dtype> {
   bool is_1x1_;
   bool force_nd_im2col_;
 
- private:
+ //private:
   // wrap im2col/col2im so we don't have to remember the (long) argument lists
   inline void conv_im2col_cpu(const Dtype* data, Dtype* col_buff) {
     if (!force_nd_im2col_ && num_spatial_axes_ == 2) {

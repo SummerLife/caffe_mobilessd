@@ -1,0 +1,30 @@
+[Anjuta]
+Maximized=1
+Geometry=1855x1056+65+24
+
+[Execution]
+Program arguments=quantize --model=examples/mobilessd/deploy.prototxt --weights=examples/mobilessd/mobilenet_iter_73000.caffemodel --model_quantized=examples/mobilessd/quantized.prototxt --trimming_mode=dynamic_fixed_point --iterations=5 --error_margin=60
+Program uri=../../build/tools/ristretto
+Run in terminal=2
+Working directories=../../.
+
+[File Loader]
+Files=../../src/caffe/net.cpp#395
+
+[Document Manager]
+bookmarks=<?xml version="1.0" encoding="UTF-8"?>\n<bookmarks/>\n
+
+[Project Manager]
+Expand=caffe
+
+[Debugger]
+Breakpoint=1:../../src/caffe/net.cpp:422:0:
+Stop at beginning=2
+
+[Build]
+Configuration list=1:Default:%%%1:Debug:Debug%%%1:Profiling:Profiling%%%1:Optimized:Optimized
+Selected Configuration=Default
+BuildArgs/Default=--enable-maintainer-mode
+BuildArgs/Debug=--enable-maintainer-mode 'CFLAGS=-g -O0' 'CXXFLAGS=-g -O0' 'JFLAGS=-g -O0' 'FFLAGS=-g -O0'
+BuildArgs/Profiling=--enable-maintainer-mode 'CFLAGS=-g -pg' 'CXXFLAGS=-g -pg' 'JFLAGS=-g -pg' 'FFLAGS=-g -pg'
+BuildArgs/Optimized=--enable-maintainer-mode 'CFLAGS=-O2' 'CXXFLAGS=-O2' 'JFLAGS=-O2' 'FFLAGS=-O2'
