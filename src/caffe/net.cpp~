@@ -421,8 +421,8 @@ void Net<Dtype>::RangeInLayers(vector<string>* layer_name,
       // Consider the weights only, ignore the bias
       max_val = findMax(&(*layers_[layer_id]->blobs()[0]));
       max_param->at(index) = std::max(max_param->at(index), max_val);
-	  BaseConvolutionLayer<float>* d = dynamic_cast<BaseConvolutionLayer<float>*>(layers_[layer_id].get());
-	   max_val = findMax(&(*d->blobs()[0]));
+	  BaseConvolutionLayer<Dtype>* d = dynamic_cast<BaseConvolutionLayer<Dtype>*>(layers_[layer_id].get());
+	  //max_val = findMax(&(*d->blobs()[0]));
 	  if(d->return_bias_term_())
 //	  if((layers_[layer_id].get())->return_bias_term_())
 	  {

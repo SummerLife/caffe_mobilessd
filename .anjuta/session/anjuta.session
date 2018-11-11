@@ -2,17 +2,17 @@
 Maximized=1
 Geometry=1855x1056+65+24
 
+[File Loader]
+Files=../../src/caffe/net.cpp#17
+
+[Document Manager]
+bookmarks=<?xml version="1.0" encoding="UTF-8"?>\n<bookmarks/>\n
+
 [Execution]
 Program arguments=quantize --model=examples/mobilessd/deploy.prototxt --weights=examples/mobilessd/mobilenet_iter_73000.caffemodel --model_quantized=examples/mobilessd/quantized.prototxt --trimming_mode=dynamic_fixed_point --iterations=5 --error_margin=60
 Program uri=../../build/tools/ristretto
 Run in terminal=2
 Working directories=../../.
-
-[File Loader]
-Files=../../src/caffe/net.cpp#395
-
-[Document Manager]
-bookmarks=<?xml version="1.0" encoding="UTF-8"?>\n<bookmarks/>\n
 
 [Project Manager]
 Expand=caffe
