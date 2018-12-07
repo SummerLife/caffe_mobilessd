@@ -224,7 +224,52 @@ void ConvolutionRistrettoLayer<Dtype>::LayerSetUp(
 }
 
 
+/*
+template <typename Dtype>
+void ConvolutionRistrettoLayer<Dtype>::Forward_cpu(
+      const vector<Blob<Dtype>*>& bottom, const vector<Blob<Dtype>*>& top) {
+  // Trim layer input
+  if (this->phase_ == TEST) {
+    for (int i = 0; i < bottom.size(); ++i) {
+      this->QuantizeLayerInputs_cpu(bottom[i]->mutable_cpu_data(),
+          bottom[i]->count());
+    }
+  }
+  // Trim weights
+  caffe_copy(this->blobs_[0]->count(), this->blobs_[0]->cpu_data(),
+      this->weights_quantized_[0]->mutable_cpu_data());
+  if (this->bias_term_) {
+    caffe_copy(this->blobs_[1]->count(), this->blobs_[1]->cpu_data(),
+        this->weights_quantized_[1]->mutable_cpu_data());
+  }
+  int rounding = this->phase_ == TEST ? this->rounding_ :
+      QuantizationParameter_Rounding_STOCHASTIC;
 
+  this->QuantizeWeights_cpu(this->weights_quantized_, rounding,
+      this->bias_term_);
+
+  // Do forward propagation
+  const Dtype* weight = this->weights_quantized_[0]->cpu_data();
+  for (int i = 0; i < bottom.size(); ++i) {
+    const Dtype* bottom_data = bottom[i]->cpu_data();
+    Dtype* top_data = top[i]->mutable_cpu_data();
+    for (int n = 0; n < this->num_; ++n) {
+      this->forward_cpu_gemm(bottom_data + n * this->bottom_dim_, weight,
+          top_data + n * this->top_dim_);
+      if (this->bias_term_) {
+        const Dtype* bias = this->weights_quantized_[1]->cpu_data();
+        this->forward_cpu_bias(top_data + n * this->top_dim_, bias);
+      }
+    }
+    // Trim layer output
+    if (this->phase_ == TEST) {
+      this->QuantizeLayerOutputs_cpu(top_data, top[i]->count());
+    }
+  }
+}
+*/
+
+/*
 template <typename Dtype>
 void ConvolutionRistrettoLayer<Dtype>::Forward_cpu(
       const vector<Blob<Dtype>*>& bottom, const vector<Blob<Dtype>*>& top) {
@@ -290,6 +335,65 @@ void ConvolutionRistrettoLayer<Dtype>::Forward_cpu(
       }
     }
     // Trim layer output
+    if (this->phase_ == TEST) {
+      this->QuantizeLayerOutputs_cpu(top_data, top[i]->count());
+    }
+  }
+}
+*/
+
+template <typename Dtype>
+void ConvolutionRistrettoLayer<Dtype>::Forward_cpu(
+      const vector<Blob<Dtype>*>& bottom, const vector<Blob<Dtype>*>& top) {
+  if (this->phase_ == TEST) {
+	  for (int i = 0; i < bottom.size(); ++i) {
+		this->QuantizeLayerInputs_cpu(bottom[i]->mutable_cpu_data(),
+		    bottom[i]->count());
+	  }
+  }
+  // Trim weights
+  caffe_copy(this->blobs_[0]->count(), this->blobs_[0]->cpu_data(),
+      this->weights_quantized_[0]->mutable_cpu_data());
+  if (this->bias_term_) {
+    caffe_copy(this->blobs_[1]->count(), this->blobs_[1]->cpu_data(),
+        this->weights_quantized_[1]->mutable_cpu_data());
+  }
+  int rounding = this->phase_ == TEST ? this->rounding_ :
+      QuantizationParameter_Rounding_STOCHASTIC;
+		
+  string layer_name = this->layer_param_.name();
+  string::size_type Pos = 0;
+  while( (Pos = layer_name.find('/',Pos)) != string::npos){
+	layer_name.replace(Pos,1,"_");
+  }
+
+  //char * layer_name = "1";
+  char str[][20] ={"_weight_uq_","_weight_q_","_",".dat"};
+  char name[100];
+  sprintf(name,"%s%s%d%s",layer_name.data(),str[0],this->fl_params_,str[3]);
+  this->op_data(this->weights_quantized_[0]->cpu_data()
+                ,this->weights_quantized_[0]->count(),name);
+		
+  this->QuantizeWeights_cpu(this->weights_quantized_, rounding,this->bias_term_);
+		
+  sprintf(name,"%s%s%d%s",layer_name.data(),str[1],this->fl_params_,str[3]);
+  this->op_data(this->weights_quantized_[0]->cpu_data()
+                ,this->weights_quantized_[0]->count(),name);
+		
+
+  // Do forward propagation
+  const Dtype* weight = this->weights_quantized_[0]->cpu_data();
+  for (int i = 0; i < bottom.size(); ++i) {
+    const Dtype* bottom_data = bottom[i]->cpu_data();
+    Dtype* top_data = top[i]->mutable_cpu_data();
+    for (int n = 0; n < this->num_; ++n) {
+      this->forward_cpu_gemm(bottom_data + n * this->bottom_dim_, weight,
+          top_data + n * this->top_dim_);
+      if (this->bias_term_) {
+        const Dtype* bias = this->weights_quantized_[1]->cpu_data();
+        this->forward_cpu_bias(top_data + n * this->top_dim_, bias);
+      }
+    }
     if (this->phase_ == TEST) {
       this->QuantizeLayerOutputs_cpu(top_data, top[i]->count());
     }

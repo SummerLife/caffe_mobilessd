@@ -1,0 +1,1 @@
+quantize --model=examples/mobilessd/no_bn.prototxt --weights=examples/mobilessd/no_bn.caffemodel --model_quantized=examples/mobilessd/quantized_no_bn.prototxt --trimming_mode=dynamic_fixed_point --iterations=5 --error_margin=60

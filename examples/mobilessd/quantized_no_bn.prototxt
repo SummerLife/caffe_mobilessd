@@ -1,15 +1,171 @@
 name: "MobileNet-SSD"
 layer {
   name: "data"
-  type: "Input"
+  type: "AnnotatedData"
   top: "data"
-  input_param {
-    shape {
-      dim: 1
-      dim: 3
-      dim: 300
-      dim: 300
+  top: "label"
+  include {
+    phase: TRAIN
+  }
+  transform_param {
+    scale: 0.007843
+    mirror: true
+    mean_value: 127.5
+    mean_value: 127.5
+    mean_value: 127.5
+    resize_param {
+      prob: 1
+      resize_mode: WARP
+      height: 300
+      width: 300
+      interp_mode: LINEAR
+      interp_mode: AREA
+      interp_mode: NEAREST
+      interp_mode: CUBIC
+      interp_mode: LANCZOS4
     }
+    emit_constraint {
+      emit_type: CENTER
+    }
+    distort_param {
+      brightness_prob: 0.5
+      brightness_delta: 32
+      contrast_prob: 0.5
+      contrast_lower: 0.5
+      contrast_upper: 1.5
+      hue_prob: 0.5
+      hue_delta: 18
+      saturation_prob: 0.5
+      saturation_lower: 0.5
+      saturation_upper: 1.5
+      random_order_prob: 0
+    }
+    expand_param {
+      prob: 0.5
+      max_expand_ratio: 4
+    }
+  }
+  data_param {
+    source: "data/VOCdevkit/VOC0712/lmdb/VOC0712_trainval_lmdb"
+    batch_size: 24
+    backend: LMDB
+  }
+  annotated_data_param {
+    batch_sampler {
+      max_sample: 1
+      max_trials: 1
+    }
+    batch_sampler {
+      sampler {
+        min_scale: 0.3
+        max_scale: 1
+        min_aspect_ratio: 0.5
+        max_aspect_ratio: 2
+      }
+      sample_constraint {
+        min_jaccard_overlap: 0.1
+      }
+      max_sample: 1
+      max_trials: 50
+    }
+    batch_sampler {
+      sampler {
+        min_scale: 0.3
+        max_scale: 1
+        min_aspect_ratio: 0.5
+        max_aspect_ratio: 2
+      }
+      sample_constraint {
+        min_jaccard_overlap: 0.3
+      }
+      max_sample: 1
+      max_trials: 50
+    }
+    batch_sampler {
+      sampler {
+        min_scale: 0.3
+        max_scale: 1
+        min_aspect_ratio: 0.5
+        max_aspect_ratio: 2
+      }
+      sample_constraint {
+        min_jaccard_overlap: 0.5
+      }
+      max_sample: 1
+      max_trials: 50
+    }
+    batch_sampler {
+      sampler {
+        min_scale: 0.3
+        max_scale: 1
+        min_aspect_ratio: 0.5
+        max_aspect_ratio: 2
+      }
+      sample_constraint {
+        min_jaccard_overlap: 0.7
+      }
+      max_sample: 1
+      max_trials: 50
+    }
+    batch_sampler {
+      sampler {
+        min_scale: 0.3
+        max_scale: 1
+        min_aspect_ratio: 0.5
+        max_aspect_ratio: 2
+      }
+      sample_constraint {
+        min_jaccard_overlap: 0.9
+      }
+      max_sample: 1
+      max_trials: 50
+    }
+    batch_sampler {
+      sampler {
+        min_scale: 0.3
+        max_scale: 1
+        min_aspect_ratio: 0.5
+        max_aspect_ratio: 2
+      }
+      sample_constraint {
+        max_jaccard_overlap: 1
+      }
+      max_sample: 1
+      max_trials: 50
+    }
+    label_map_file: "data/VOC0712/labelmap_voc.prototxt"
+  }
+}
+layer {
+  name: "data"
+  type: "AnnotatedData"
+  top: "data"
+  top: "label"
+  include {
+    phase: TEST
+  }
+  transform_param {
+    scale: 0.007843
+    mean_value: 127.5
+    mean_value: 127.5
+    mean_value: 127.5
+    resize_param {
+      prob: 1
+      resize_mode: WARP
+      height: 300
+      width: 300
+      interp_mode: LINEAR
+    }
+  }
+  data_param {
+    source: "data/VOCdevkit/VOC0712/lmdb/VOC0712_test_lmdb"
+    batch_size: 8
+    backend: LMDB
+  }
+  annotated_data_param {
+    batch_sampler {
+    }
+    label_map_file: "data/VOC0712/labelmap_voc.prototxt"
   }
 }
 layer {
@@ -35,10 +191,10 @@ layer {
     bw_layer_in: 16
     bw_layer_out: 16
     bw_params: 16
-    fl_layer_in: -2147483632
-    fl_layer_out: 13
-    fl_params: 12
-    fl_bias_params: -2147483616
+    fl_layer_in: 15
+    fl_layer_out: 10
+    fl_params: 11
+    fl_bias_params: 28
     bw_bias_params: 32
   }
 }
@@ -71,10 +227,10 @@ layer {
     bw_layer_in: 16
     bw_layer_out: 16
     bw_params: 16
-    fl_layer_in: 13
-    fl_layer_out: 11
-    fl_params: 12
-    fl_bias_params: -2147483616
+    fl_layer_in: 10
+    fl_layer_out: 9
+    fl_params: 11
+    fl_bias_params: 28
     bw_bias_params: 32
   }
 }
@@ -105,10 +261,10 @@ layer {
     bw_layer_in: 16
     bw_layer_out: 16
     bw_params: 16
-    fl_layer_in: 11
-    fl_layer_out: 10
-    fl_params: 12
-    fl_bias_params: -2147483616
+    fl_layer_in: 9
+    fl_layer_out: 7
+    fl_params: 11
+    fl_bias_params: 25
     bw_bias_params: 32
   }
 }
@@ -142,10 +298,10 @@ layer {
     bw_layer_in: 16
     bw_layer_out: 16
     bw_params: 16
-    fl_layer_in: 10
-    fl_layer_out: 12
-    fl_params: 12
-    fl_bias_params: -2147483616
+    fl_layer_in: 7
+    fl_layer_out: 9
+    fl_params: 11
+    fl_bias_params: 26
     bw_bias_params: 32
   }
 }
@@ -176,10 +332,10 @@ layer {
     bw_layer_in: 16
     bw_layer_out: 16
     bw_params: 16
-    fl_layer_in: 12
-    fl_layer_out: 11
-    fl_params: 13
-    fl_bias_params: -2147483616
+    fl_layer_in: 9
+    fl_layer_out: 8
+    fl_params: 12
+    fl_bias_params: 26
     bw_bias_params: 32
   }
 }
@@ -212,10 +368,10 @@ layer {
     bw_layer_in: 16
     bw_layer_out: 16
     bw_params: 16
-    fl_layer_in: 11
-    fl_layer_out: 11
-    fl_params: 12
-    fl_bias_params: -2147483616
+    fl_layer_in: 8
+    fl_layer_out: 9
+    fl_params: 11
+    fl_bias_params: 27
     bw_bias_params: 32
   }
 }
@@ -246,10 +402,10 @@ layer {
     bw_layer_in: 16
     bw_layer_out: 16
     bw_params: 16
-    fl_layer_in: 11
-    fl_layer_out: 11
-    fl_params: 13
-    fl_bias_params: -2147483616
+    fl_layer_in: 9
+    fl_layer_out: 9
+    fl_params: 12
+    fl_bias_params: 27
     bw_bias_params: 32
   }
 }
@@ -283,10 +439,10 @@ layer {
     bw_layer_in: 16
     bw_layer_out: 16
     bw_params: 16
-    fl_layer_in: 11
-    fl_layer_out: 12
-    fl_params: 14
-    fl_bias_params: -2147483616
+    fl_layer_in: 9
+    fl_layer_out: 11
+    fl_params: 13
+    fl_bias_params: 28
     bw_bias_params: 32
   }
 }
@@ -317,10 +473,10 @@ layer {
     bw_layer_in: 16
     bw_layer_out: 16
     bw_params: 16
-    fl_layer_in: 12
-    fl_layer_out: 13
-    fl_params: 14
-    fl_bias_params: -2147483616
+    fl_layer_in: 11
+    fl_layer_out: 10
+    fl_params: 13
+    fl_bias_params: 27
     bw_bias_params: 32
   }
 }
@@ -353,10 +509,10 @@ layer {
     bw_layer_in: 16
     bw_layer_out: 16
     bw_params: 16
-    fl_layer_in: 13
-    fl_layer_out: 12
-    fl_params: 12
-    fl_bias_params: -2147483616
+    fl_layer_in: 10
+    fl_layer_out: 10
+    fl_params: 11
+    fl_bias_params: 27
     bw_bias_params: 32
   }
 }
@@ -387,10 +543,10 @@ layer {
     bw_layer_in: 16
     bw_layer_out: 16
     bw_params: 16
-    fl_layer_in: 12
-    fl_layer_out: 12
-    fl_params: 14
-    fl_bias_params: -2147483616
+    fl_layer_in: 10
+    fl_layer_out: 10
+    fl_params: 13
+    fl_bias_params: 28
     bw_bias_params: 32
   }
 }
@@ -424,10 +580,10 @@ layer {
     bw_layer_in: 16
     bw_layer_out: 16
     bw_params: 16
-    fl_layer_in: 12
-    fl_layer_out: 12
-    fl_params: 13
-    fl_bias_params: -2147483616
+    fl_layer_in: 10
+    fl_layer_out: 10
+    fl_params: 12
+    fl_bias_params: 28
     bw_bias_params: 32
   }
 }
@@ -458,10 +614,10 @@ layer {
     bw_layer_in: 16
     bw_layer_out: 16
     bw_params: 16
-    fl_layer_in: 12
-    fl_layer_out: 12
-    fl_params: 14
-    fl_bias_params: -2147483616
+    fl_layer_in: 10
+    fl_layer_out: 10
+    fl_params: 13
+    fl_bias_params: 27
     bw_bias_params: 32
   }
 }
@@ -494,10 +650,10 @@ layer {
     bw_layer_in: 16
     bw_layer_out: 16
     bw_params: 16
-    fl_layer_in: 12
-    fl_layer_out: 13
-    fl_params: 12
-    fl_bias_params: -2147483616
+    fl_layer_in: 10
+    fl_layer_out: 10
+    fl_params: 11
+    fl_bias_params: 27
     bw_bias_params: 32
   }
 }
@@ -528,10 +684,10 @@ layer {
     bw_layer_in: 16
     bw_layer_out: 16
     bw_params: 16
-    fl_layer_in: 13
-    fl_layer_out: 13
-    fl_params: 15
-    fl_bias_params: -2147483616
+    fl_layer_in: 10
+    fl_layer_out: 11
+    fl_params: 14
+    fl_bias_params: 28
     bw_bias_params: 32
   }
 }
@@ -564,10 +720,10 @@ layer {
     bw_layer_in: 16
     bw_layer_out: 16
     bw_params: 16
-    fl_layer_in: 13
-    fl_layer_out: 12
-    fl_params: 12
-    fl_bias_params: -2147483616
+    fl_layer_in: 11
+    fl_layer_out: 10
+    fl_params: 11
+    fl_bias_params: 27
     bw_bias_params: 32
   }
 }
@@ -598,10 +754,10 @@ layer {
     bw_layer_in: 16
     bw_layer_out: 16
     bw_params: 16
-    fl_layer_in: 12
-    fl_layer_out: 12
-    fl_params: 14
-    fl_bias_params: -2147483616
+    fl_layer_in: 10
+    fl_layer_out: 11
+    fl_params: 13
+    fl_bias_params: 28
     bw_bias_params: 32
   }
 }
@@ -634,10 +790,10 @@ layer {
     bw_layer_in: 16
     bw_layer_out: 16
     bw_params: 16
-    fl_layer_in: 12
-    fl_layer_out: 12
-    fl_params: 12
-    fl_bias_params: -2147483616
+    fl_layer_in: 11
+    fl_layer_out: 10
+    fl_params: 11
+    fl_bias_params: 27
     bw_bias_params: 32
   }
 }
@@ -668,10 +824,10 @@ layer {
     bw_layer_in: 16
     bw_layer_out: 16
     bw_params: 16
-    fl_layer_in: 12
-    fl_layer_out: 12
-    fl_params: 14
-    fl_bias_params: -2147483616
+    fl_layer_in: 10
+    fl_layer_out: 10
+    fl_params: 13
+    fl_bias_params: 27
     bw_bias_params: 32
   }
 }
@@ -704,10 +860,10 @@ layer {
     bw_layer_in: 16
     bw_layer_out: 16
     bw_params: 16
-    fl_layer_in: 12
-    fl_layer_out: 11
-    fl_params: 13
-    fl_bias_params: -2147483616
+    fl_layer_in: 10
+    fl_layer_out: 10
+    fl_params: 12
+    fl_bias_params: 27
     bw_bias_params: 32
   }
 }
@@ -738,10 +894,10 @@ layer {
     bw_layer_in: 16
     bw_layer_out: 16
     bw_params: 16
-    fl_layer_in: 11
-    fl_layer_out: 11
-    fl_params: 14
-    fl_bias_params: -2147483616
+    fl_layer_in: 10
+    fl_layer_out: 10
+    fl_params: 13
+    fl_bias_params: 27
     bw_bias_params: 32
   }
 }
@@ -774,10 +930,10 @@ layer {
     bw_layer_in: 16
     bw_layer_out: 16
     bw_params: 16
-    fl_layer_in: 11
-    fl_layer_out: 10
-    fl_params: 12
-    fl_bias_params: -2147483616
+    fl_layer_in: 10
+    fl_layer_out: 9
+    fl_params: 11
+    fl_bias_params: 28
     bw_bias_params: 32
   }
 }
@@ -808,10 +964,10 @@ layer {
     bw_layer_in: 16
     bw_layer_out: 16
     bw_params: 16
-    fl_layer_in: 10
-    fl_layer_out: 10
-    fl_params: 15
-    fl_bias_params: -2147483616
+    fl_layer_in: 9
+    fl_layer_out: 9
+    fl_params: 14
+    fl_bias_params: 27
     bw_bias_params: 32
   }
 }
@@ -845,10 +1001,10 @@ layer {
     bw_layer_in: 16
     bw_layer_out: 16
     bw_params: 16
-    fl_layer_in: 10
-    fl_layer_out: 10
-    fl_params: 10
-    fl_bias_params: -2147483616
+    fl_layer_in: 9
+    fl_layer_out: 9
+    fl_params: 9
+    fl_bias_params: 28
     bw_bias_params: 32
   }
 }
@@ -879,10 +1035,10 @@ layer {
     bw_layer_in: 16
     bw_layer_out: 16
     bw_params: 16
-    fl_layer_in: 10
-    fl_layer_out: 11
-    fl_params: 15
-    fl_bias_params: -2147483616
+    fl_layer_in: 9
+    fl_layer_out: 10
+    fl_params: 14
+    fl_bias_params: 27
     bw_bias_params: 32
   }
 }
@@ -915,10 +1071,10 @@ layer {
     bw_layer_in: 16
     bw_layer_out: 16
     bw_params: 16
-    fl_layer_in: 11
-    fl_layer_out: 10
-    fl_params: 9
-    fl_bias_params: -2147483616
+    fl_layer_in: 10
+    fl_layer_out: 9
+    fl_params: 8
+    fl_bias_params: 25
     bw_bias_params: 32
   }
 }
@@ -949,10 +1105,10 @@ layer {
     bw_layer_in: 16
     bw_layer_out: 16
     bw_params: 16
-    fl_layer_in: 10
-    fl_layer_out: 9
-    fl_params: 15
-    fl_bias_params: -2147483616
+    fl_layer_in: 9
+    fl_layer_out: 8
+    fl_params: 14
+    fl_bias_params: 26
     bw_bias_params: 32
   }
 }
@@ -983,10 +1139,10 @@ layer {
     bw_layer_in: 16
     bw_layer_out: 16
     bw_params: 16
-    fl_layer_in: 9
-    fl_layer_out: 10
-    fl_params: 15
-    fl_bias_params: -2147483616
+    fl_layer_in: 8
+    fl_layer_out: 9
+    fl_params: 14
+    fl_bias_params: 29
     bw_bias_params: 32
   }
 }
@@ -1019,10 +1175,10 @@ layer {
     bw_layer_in: 16
     bw_layer_out: 16
     bw_params: 16
-    fl_layer_in: 10
-    fl_layer_out: 11
-    fl_params: 15
-    fl_bias_params: -2147483616
+    fl_layer_in: 9
+    fl_layer_out: 10
+    fl_params: 14
+    fl_bias_params: 29
     bw_bias_params: 32
   }
 }
@@ -1053,10 +1209,10 @@ layer {
     bw_layer_in: 16
     bw_layer_out: 16
     bw_params: 16
-    fl_layer_in: 11
-    fl_layer_out: 11
-    fl_params: 16
-    fl_bias_params: -2147483616
+    fl_layer_in: 10
+    fl_layer_out: 10
+    fl_params: 15
+    fl_bias_params: 30
     bw_bias_params: 32
   }
 }
@@ -1089,10 +1245,10 @@ layer {
     bw_layer_in: 16
     bw_layer_out: 16
     bw_params: 16
-    fl_layer_in: 11
-    fl_layer_out: 11
-    fl_params: 15
-    fl_bias_params: -2147483616
+    fl_layer_in: 10
+    fl_layer_out: 10
+    fl_params: 14
+    fl_bias_params: 29
     bw_bias_params: 32
   }
 }
@@ -1123,10 +1279,10 @@ layer {
     bw_layer_in: 16
     bw_layer_out: 16
     bw_params: 16
-    fl_layer_in: 11
-    fl_layer_out: 13
-    fl_params: 16
-    fl_bias_params: -2147483616
+    fl_layer_in: 10
+    fl_layer_out: 12
+    fl_params: 15
+    fl_bias_params: 29
     bw_bias_params: 32
   }
 }
@@ -1159,10 +1315,10 @@ layer {
     bw_layer_in: 16
     bw_layer_out: 16
     bw_params: 16
-    fl_layer_in: 13
-    fl_layer_out: 12
-    fl_params: 15
-    fl_bias_params: -2147483616
+    fl_layer_in: 12
+    fl_layer_out: 11
+    fl_params: 14
+    fl_bias_params: 28
     bw_bias_params: 32
   }
 }
@@ -1193,10 +1349,10 @@ layer {
     bw_layer_in: 16
     bw_layer_out: 16
     bw_params: 16
-    fl_layer_in: 12
-    fl_layer_out: 12
-    fl_params: 15
-    fl_bias_params: -2147483616
+    fl_layer_in: 11
+    fl_layer_out: 11
+    fl_params: 14
+    fl_bias_params: 30
     bw_bias_params: 32
   }
 }
@@ -1229,10 +1385,10 @@ layer {
     bw_layer_in: 16
     bw_layer_out: 16
     bw_params: 16
-    fl_layer_in: 12
-    fl_layer_out: 13
-    fl_params: 14
-    fl_bias_params: -2147483616
+    fl_layer_in: 11
+    fl_layer_out: 12
+    fl_params: 13
+    fl_bias_params: 29
     bw_bias_params: 32
   }
 }
@@ -1271,10 +1427,10 @@ layer {
     bw_layer_in: 16
     bw_layer_out: 16
     bw_params: 16
-    fl_layer_in: 10
-    fl_layer_out: 11
-    fl_params: 14
-    fl_bias_params: -2147483616
+    fl_layer_in: 9
+    fl_layer_out: 10
+    fl_params: 13
+    fl_bias_params: 30
     bw_bias_params: 32
   }
 }
@@ -1328,10 +1484,10 @@ layer {
     bw_layer_in: 16
     bw_layer_out: 16
     bw_params: 16
-    fl_layer_in: 10
-    fl_layer_out: 6
-    fl_params: 12
-    fl_bias_params: -2147483616
+    fl_layer_in: 9
+    fl_layer_out: 5
+    fl_params: 11
+    fl_bias_params: 29
     bw_bias_params: 32
   }
 }
@@ -1403,10 +1559,10 @@ layer {
     bw_layer_in: 16
     bw_layer_out: 16
     bw_params: 16
-    fl_layer_in: 9
-    fl_layer_out: 10
-    fl_params: 15
-    fl_bias_params: -2147483616
+    fl_layer_in: 8
+    fl_layer_out: 9
+    fl_params: 14
+    fl_bias_params: 30
     bw_bias_params: 32
   }
 }
@@ -1460,10 +1616,10 @@ layer {
     bw_layer_in: 16
     bw_layer_out: 16
     bw_params: 16
-    fl_layer_in: 9
-    fl_layer_out: 6
-    fl_params: 12
-    fl_bias_params: -2147483616
+    fl_layer_in: 8
+    fl_layer_out: 5
+    fl_params: 11
+    fl_bias_params: 29
     bw_bias_params: 32
   }
 }
@@ -1537,10 +1693,10 @@ layer {
     bw_layer_in: 16
     bw_layer_out: 16
     bw_params: 16
-    fl_layer_in: 11
-    fl_layer_out: 12
-    fl_params: 15
-    fl_bias_params: -2147483616
+    fl_layer_in: 10
+    fl_layer_out: 11
+    fl_params: 14
+    fl_bias_params: 30
     bw_bias_params: 32
   }
 }
@@ -1594,10 +1750,10 @@ layer {
     bw_layer_in: 16
     bw_layer_out: 16
     bw_params: 16
-    fl_layer_in: 11
-    fl_layer_out: 7
-    fl_params: 12
-    fl_bias_params: -2147483616
+    fl_layer_in: 10
+    fl_layer_out: 6
+    fl_params: 11
+    fl_bias_params: 29
     bw_bias_params: 32
   }
 }
@@ -1671,10 +1827,10 @@ layer {
     bw_layer_in: 16
     bw_layer_out: 16
     bw_params: 16
-    fl_layer_in: 11
-    fl_layer_out: 13
-    fl_params: 15
-    fl_bias_params: -2147483616
+    fl_layer_in: 10
+    fl_layer_out: 12
+    fl_params: 14
+    fl_bias_params: 30
     bw_bias_params: 32
   }
 }
@@ -1728,10 +1884,10 @@ layer {
     bw_layer_in: 16
     bw_layer_out: 16
     bw_params: 16
-    fl_layer_in: 11
-    fl_layer_out: 7
-    fl_params: 12
-    fl_bias_params: -2147483616
+    fl_layer_in: 10
+    fl_layer_out: 6
+    fl_params: 11
+    fl_bias_params: 30
     bw_bias_params: 32
   }
 }
@@ -1805,10 +1961,10 @@ layer {
     bw_layer_in: 16
     bw_layer_out: 16
     bw_params: 16
-    fl_layer_in: 12
-    fl_layer_out: 14
-    fl_params: 15
-    fl_bias_params: -2147483616
+    fl_layer_in: 11
+    fl_layer_out: 13
+    fl_params: 14
+    fl_bias_params: 30
     bw_bias_params: 32
   }
 }
@@ -1862,10 +2018,10 @@ layer {
     bw_layer_in: 16
     bw_layer_out: 16
     bw_params: 16
-    fl_layer_in: 12
-    fl_layer_out: 6
-    fl_params: 12
-    fl_bias_params: -2147483616
+    fl_layer_in: 11
+    fl_layer_out: 5
+    fl_params: 11
+    fl_bias_params: 29
     bw_bias_params: 32
   }
 }
@@ -1939,10 +2095,10 @@ layer {
     bw_layer_in: 16
     bw_layer_out: 16
     bw_params: 16
-    fl_layer_in: 13
-    fl_layer_out: 13
-    fl_params: 16
-    fl_bias_params: -2147483616
+    fl_layer_in: 12
+    fl_layer_out: 12
+    fl_params: 15
+    fl_bias_params: 30
     bw_bias_params: 32
   }
 }
@@ -1996,10 +2152,10 @@ layer {
     bw_layer_in: 16
     bw_layer_out: 16
     bw_params: 16
-    fl_layer_in: 13
-    fl_layer_out: 7
-    fl_params: 13
-    fl_bias_params: -2147483616
+    fl_layer_in: 12
+    fl_layer_out: 6
+    fl_params: 12
+    fl_bias_params: 27
     bw_bias_params: 32
   }
 }
@@ -2124,9 +2280,6 @@ layer {
   bottom: "mbox_conf_flatten"
   bottom: "mbox_priorbox"
   top: "detection_out"
-  include {
-    phase: TEST
-  }
   detection_output_param {
     num_classes: 21
     share_location: true
@@ -2138,5 +2291,18 @@ layer {
     code_type: CENTER_SIZE
     keep_top_k: 100
     confidence_threshold: 0.25
+  }
+}
+layer {
+  name: "detection_eval"
+  type: "DetectionEvaluate"
+  bottom: "detection_out"
+  bottom: "label"
+  top: "detection_eval"
+  detection_evaluate_param {
+    num_classes: 21
+    background_label_id: 0
+    overlap_threshold: 0.5
+    evaluate_difficult_gt: false
   }
 }

@@ -60,7 +60,7 @@ layer {
     bw_layer_out: 16
     bw_params: 16
     fl_layer_in: 16
-    fl_layer_out: 13
+    fl_layer_out: 14
     fl_params: 15
     fl_bias_params: 33
     bw_bias_params: 32
@@ -103,7 +103,7 @@ layer {
     bw_layer_in: 16
     bw_layer_out: 16
     bw_params: 16
-    fl_layer_in: 13
+    fl_layer_in: 14
     fl_layer_out: 12
     fl_params: 17
     fl_bias_params: 34
