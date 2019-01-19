@@ -394,9 +394,10 @@ void ConvolutionRistrettoLayer<Dtype>::Forward_cpu(
         this->forward_cpu_bias(top_data + n * this->top_dim_, bias);
       }
     }
-    if (this->phase_ == TEST) {
+/*
+ *  if (this->phase_ == TEST) {
       this->QuantizeLayerOutputs_cpu(top_data, top[i]->count());
-    }
+    }*/
   }
 }
 

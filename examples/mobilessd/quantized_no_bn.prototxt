@@ -193,7 +193,7 @@ layer {
     bw_params: 16
     fl_layer_in: 15
     fl_layer_out: 10
-    fl_params: 11
+    fl_params: 12
     fl_bias_params: 28
     bw_bias_params: 32
   }
@@ -229,7 +229,7 @@ layer {
     bw_params: 16
     fl_layer_in: 10
     fl_layer_out: 9
-    fl_params: 11
+    fl_params: 12
     fl_bias_params: 28
     bw_bias_params: 32
   }
@@ -263,7 +263,7 @@ layer {
     bw_params: 16
     fl_layer_in: 9
     fl_layer_out: 7
-    fl_params: 11
+    fl_params: 12
     fl_bias_params: 25
     bw_bias_params: 32
   }
@@ -299,8 +299,8 @@ layer {
     bw_layer_out: 16
     bw_params: 16
     fl_layer_in: 7
-    fl_layer_out: 9
-    fl_params: 11
+    fl_layer_out: 10
+    fl_params: 12
     fl_bias_params: 26
     bw_bias_params: 32
   }
@@ -332,9 +332,9 @@ layer {
     bw_layer_in: 16
     bw_layer_out: 16
     bw_params: 16
-    fl_layer_in: 9
-    fl_layer_out: 8
-    fl_params: 12
+    fl_layer_in: 10
+    fl_layer_out: 9
+    fl_params: 13
     fl_bias_params: 26
     bw_bias_params: 32
   }
@@ -368,9 +368,9 @@ layer {
     bw_layer_in: 16
     bw_layer_out: 16
     bw_params: 16
-    fl_layer_in: 8
+    fl_layer_in: 9
     fl_layer_out: 9
-    fl_params: 11
+    fl_params: 12
     fl_bias_params: 27
     bw_bias_params: 32
   }
@@ -404,7 +404,7 @@ layer {
     bw_params: 16
     fl_layer_in: 9
     fl_layer_out: 9
-    fl_params: 12
+    fl_params: 13
     fl_bias_params: 27
     bw_bias_params: 32
   }
@@ -441,7 +441,7 @@ layer {
     bw_params: 16
     fl_layer_in: 9
     fl_layer_out: 11
-    fl_params: 13
+    fl_params: 14
     fl_bias_params: 28
     bw_bias_params: 32
   }
@@ -475,7 +475,7 @@ layer {
     bw_params: 16
     fl_layer_in: 11
     fl_layer_out: 10
-    fl_params: 13
+    fl_params: 14
     fl_bias_params: 27
     bw_bias_params: 32
   }
@@ -511,7 +511,7 @@ layer {
     bw_params: 16
     fl_layer_in: 10
     fl_layer_out: 10
-    fl_params: 11
+    fl_params: 12
     fl_bias_params: 27
     bw_bias_params: 32
   }
@@ -545,7 +545,7 @@ layer {
     bw_params: 16
     fl_layer_in: 10
     fl_layer_out: 10
-    fl_params: 13
+    fl_params: 14
     fl_bias_params: 28
     bw_bias_params: 32
   }
@@ -582,7 +582,7 @@ layer {
     bw_params: 16
     fl_layer_in: 10
     fl_layer_out: 10
-    fl_params: 12
+    fl_params: 13
     fl_bias_params: 28
     bw_bias_params: 32
   }
@@ -616,7 +616,7 @@ layer {
     bw_params: 16
     fl_layer_in: 10
     fl_layer_out: 10
-    fl_params: 13
+    fl_params: 14
     fl_bias_params: 27
     bw_bias_params: 32
   }
@@ -652,7 +652,7 @@ layer {
     bw_params: 16
     fl_layer_in: 10
     fl_layer_out: 10
-    fl_params: 11
+    fl_params: 12
     fl_bias_params: 27
     bw_bias_params: 32
   }
@@ -686,7 +686,7 @@ layer {
     bw_params: 16
     fl_layer_in: 10
     fl_layer_out: 11
-    fl_params: 14
+    fl_params: 15
     fl_bias_params: 28
     bw_bias_params: 32
   }
@@ -722,7 +722,7 @@ layer {
     bw_params: 16
     fl_layer_in: 11
     fl_layer_out: 10
-    fl_params: 11
+    fl_params: 12
     fl_bias_params: 27
     bw_bias_params: 32
   }
@@ -756,7 +756,7 @@ layer {
     bw_params: 16
     fl_layer_in: 10
     fl_layer_out: 11
-    fl_params: 13
+    fl_params: 14
     fl_bias_params: 28
     bw_bias_params: 32
   }
@@ -792,7 +792,7 @@ layer {
     bw_params: 16
     fl_layer_in: 11
     fl_layer_out: 10
-    fl_params: 11
+    fl_params: 12
     fl_bias_params: 27
     bw_bias_params: 32
   }
@@ -826,7 +826,7 @@ layer {
     bw_params: 16
     fl_layer_in: 10
     fl_layer_out: 10
-    fl_params: 13
+    fl_params: 14
     fl_bias_params: 27
     bw_bias_params: 32
   }
@@ -862,7 +862,7 @@ layer {
     bw_params: 16
     fl_layer_in: 10
     fl_layer_out: 10
-    fl_params: 12
+    fl_params: 13
     fl_bias_params: 27
     bw_bias_params: 32
   }
@@ -896,7 +896,7 @@ layer {
     bw_params: 16
     fl_layer_in: 10
     fl_layer_out: 10
-    fl_params: 13
+    fl_params: 14
     fl_bias_params: 27
     bw_bias_params: 32
   }
@@ -932,7 +932,7 @@ layer {
     bw_params: 16
     fl_layer_in: 10
     fl_layer_out: 9
-    fl_params: 11
+    fl_params: 12
     fl_bias_params: 28
     bw_bias_params: 32
   }
@@ -966,7 +966,7 @@ layer {
     bw_params: 16
     fl_layer_in: 9
     fl_layer_out: 9
-    fl_params: 14
+    fl_params: 15
     fl_bias_params: 27
     bw_bias_params: 32
   }
@@ -1003,7 +1003,7 @@ layer {
     bw_params: 16
     fl_layer_in: 9
     fl_layer_out: 9
-    fl_params: 9
+    fl_params: 10
     fl_bias_params: 28
     bw_bias_params: 32
   }
@@ -1037,7 +1037,7 @@ layer {
     bw_params: 16
     fl_layer_in: 9
     fl_layer_out: 10
-    fl_params: 14
+    fl_params: 15
     fl_bias_params: 27
     bw_bias_params: 32
   }
@@ -1073,7 +1073,7 @@ layer {
     bw_params: 16
     fl_layer_in: 10
     fl_layer_out: 9
-    fl_params: 8
+    fl_params: 9
     fl_bias_params: 25
     bw_bias_params: 32
   }
@@ -1107,7 +1107,7 @@ layer {
     bw_params: 16
     fl_layer_in: 9
     fl_layer_out: 8
-    fl_params: 14
+    fl_params: 15
     fl_bias_params: 26
     bw_bias_params: 32
   }
@@ -1141,7 +1141,7 @@ layer {
     bw_params: 16
     fl_layer_in: 8
     fl_layer_out: 9
-    fl_params: 14
+    fl_params: 15
     fl_bias_params: 29
     bw_bias_params: 32
   }
@@ -1177,7 +1177,7 @@ layer {
     bw_params: 16
     fl_layer_in: 9
     fl_layer_out: 10
-    fl_params: 14
+    fl_params: 15
     fl_bias_params: 29
     bw_bias_params: 32
   }
@@ -1211,7 +1211,7 @@ layer {
     bw_params: 16
     fl_layer_in: 10
     fl_layer_out: 10
-    fl_params: 15
+    fl_params: 16
     fl_bias_params: 30
     bw_bias_params: 32
   }
@@ -1247,7 +1247,7 @@ layer {
     bw_params: 16
     fl_layer_in: 10
     fl_layer_out: 10
-    fl_params: 14
+    fl_params: 15
     fl_bias_params: 29
     bw_bias_params: 32
   }
@@ -1281,7 +1281,7 @@ layer {
     bw_params: 16
     fl_layer_in: 10
     fl_layer_out: 12
-    fl_params: 15
+    fl_params: 16
     fl_bias_params: 29
     bw_bias_params: 32
   }
@@ -1317,7 +1317,7 @@ layer {
     bw_params: 16
     fl_layer_in: 12
     fl_layer_out: 11
-    fl_params: 14
+    fl_params: 15
     fl_bias_params: 28
     bw_bias_params: 32
   }
@@ -1350,8 +1350,8 @@ layer {
     bw_layer_out: 16
     bw_params: 16
     fl_layer_in: 11
-    fl_layer_out: 11
-    fl_params: 14
+    fl_layer_out: 12
+    fl_params: 15
     fl_bias_params: 30
     bw_bias_params: 32
   }
@@ -1385,9 +1385,9 @@ layer {
     bw_layer_in: 16
     bw_layer_out: 16
     bw_params: 16
-    fl_layer_in: 11
+    fl_layer_in: 12
     fl_layer_out: 12
-    fl_params: 13
+    fl_params: 14
     fl_bias_params: 29
     bw_bias_params: 32
   }
@@ -1429,7 +1429,7 @@ layer {
     bw_params: 16
     fl_layer_in: 9
     fl_layer_out: 10
-    fl_params: 13
+    fl_params: 14
     fl_bias_params: 30
     bw_bias_params: 32
   }
@@ -1486,7 +1486,7 @@ layer {
     bw_params: 16
     fl_layer_in: 9
     fl_layer_out: 5
-    fl_params: 11
+    fl_params: 12
     fl_bias_params: 29
     bw_bias_params: 32
   }
@@ -1561,7 +1561,7 @@ layer {
     bw_params: 16
     fl_layer_in: 8
     fl_layer_out: 9
-    fl_params: 14
+    fl_params: 15
     fl_bias_params: 30
     bw_bias_params: 32
   }
@@ -1618,7 +1618,7 @@ layer {
     bw_params: 16
     fl_layer_in: 8
     fl_layer_out: 5
-    fl_params: 11
+    fl_params: 12
     fl_bias_params: 29
     bw_bias_params: 32
   }
@@ -1695,7 +1695,7 @@ layer {
     bw_params: 16
     fl_layer_in: 10
     fl_layer_out: 11
-    fl_params: 14
+    fl_params: 15
     fl_bias_params: 30
     bw_bias_params: 32
   }
@@ -1752,7 +1752,7 @@ layer {
     bw_params: 16
     fl_layer_in: 10
     fl_layer_out: 6
-    fl_params: 11
+    fl_params: 12
     fl_bias_params: 29
     bw_bias_params: 32
   }
@@ -1829,7 +1829,7 @@ layer {
     bw_params: 16
     fl_layer_in: 10
     fl_layer_out: 12
-    fl_params: 14
+    fl_params: 15
     fl_bias_params: 30
     bw_bias_params: 32
   }
@@ -1886,7 +1886,7 @@ layer {
     bw_params: 16
     fl_layer_in: 10
     fl_layer_out: 6
-    fl_params: 11
+    fl_params: 12
     fl_bias_params: 30
     bw_bias_params: 32
   }
@@ -1963,7 +1963,7 @@ layer {
     bw_params: 16
     fl_layer_in: 11
     fl_layer_out: 13
-    fl_params: 14
+    fl_params: 15
     fl_bias_params: 30
     bw_bias_params: 32
   }
@@ -2019,8 +2019,8 @@ layer {
     bw_layer_out: 16
     bw_params: 16
     fl_layer_in: 11
-    fl_layer_out: 5
-    fl_params: 11
+    fl_layer_out: 6
+    fl_params: 12
     fl_bias_params: 29
     bw_bias_params: 32
   }
@@ -2097,7 +2097,7 @@ layer {
     bw_params: 16
     fl_layer_in: 12
     fl_layer_out: 12
-    fl_params: 15
+    fl_params: 16
     fl_bias_params: 30
     bw_bias_params: 32
   }
@@ -2153,8 +2153,8 @@ layer {
     bw_layer_out: 16
     bw_params: 16
     fl_layer_in: 12
-    fl_layer_out: 6
-    fl_params: 12
+    fl_layer_out: 7
+    fl_params: 13
     fl_bias_params: 27
     bw_bias_params: 32
   }

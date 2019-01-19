@@ -189,7 +189,7 @@ void Quantization::RunForwardBatches(const int iterations,
 //			", max input=" << max_in_[k] <<
 //			", max output=" << max_out_[k] <<
 			", max parameters=" << max_params_[k]<<
-//			", max bias=" << max_bias_[k] << 
+//			", max bias=" << max_bias_[k] <<
 			  std::endl;
 	 }
     }
@@ -296,7 +296,7 @@ void Quantization::Quantize2DynamicFixedPoint() {
   for (int i = 0; i < layer_names_.size(); ++i) {
     il_in_.push_back((int)ceil(log2(max_in_[i]))+1);
     il_out_.push_back((int)ceil(log2(max_out_[i]))+1);
-    il_params_.push_back((int)ceil(log2(max_params_[i]))+2);
+    il_params_.push_back((int)ceil(log2(max_params_[i]))+1);
     il_bias_.push_back((int)ceil(log2(max_bias_[i]))+1);
   }
   // Debug
@@ -308,12 +308,11 @@ void Quantization::Quantize2DynamicFixedPoint() {
 		", integer length bias=" << il_bias_[k];
   }
 
-
-
-  bw_conv_params_ = 16;
-  bw_fc_params_ = 16;
-  bw_out_ = 16;
-  bw_in_ = 16;
+  int bw = 16;
+  bw_conv_params_ = bw;
+  bw_fc_params_ = bw;
+  bw_out_ = bw;
+  bw_in_ = bw;
   bw_bias_ = 32;
 
   NetParameter param;
@@ -324,13 +323,13 @@ void Quantization::Quantize2DynamicFixedPoint() {
   // This network combines dynamic fixed point parameters in convolutional and
   // inner product layers, as well as dynamic fixed point activations.
   caffe::ReadNetParamsFromTextFileOrDie(model_, &param);
-	
+
   param.mutable_state()->set_phase(caffe::TEST);
-	
-	
+
+
   EditNetDescriptionDynamicFixedPoint(&param, "Convolution_and_InnerProduct",
       "Parameters_and_Activations", bw_conv_params_, bw_fc_params_, bw_in_,
-      bw_out_, bw_bias_);	
+      bw_out_, bw_bias_);
 
   net_test = new Net<float>(param);
   net_test->CopyTrainedLayersFrom(weights_);
@@ -372,6 +371,19 @@ void Quantization::Quantize2DynamicFixedPoint() {
   LOG(INFO) << bw_out_ << "bit layer activations:";
   LOG(INFO) << "mAP: " << accuracy;
   LOG(INFO) << "Please fine-tune.";
+
+
+  std::ofstream results("examples/mobilessd/result.txt",ios::app);
+  if (results.is_open())
+  {
+	  results << "Baseline 32bit float: " << test_score_baseline_<< '\n';
+	  results << "Dynamic fixed point net:"<< '\n';
+	  results << bw_conv_params_ << "bit CONV weights,"<< '\n';
+	  results << bw_fc_params_ << "bit FC weights,"<< '\n';
+	  results << bw_out_ << "bit layer activations:"<< '\n';
+	  results << "mAP: " << accuracy << '\n' << '\n' << '\n';
+	  results.close();
+  }
 }
 
 void Quantization::Quantize2MiniFloat() {

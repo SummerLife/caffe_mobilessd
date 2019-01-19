@@ -33,7 +33,7 @@ void BaseRistrettoLayer<Dtype>::QuantizeWeights_cpu(
     Trim2FixedPoint_cpu(weight, cnt_weight, bw_params_, rounding, fl_params_);
     if (bias_term) {
       Trim2FixedPoint_cpu(weights_quantized[1]->mutable_cpu_data(),
-          weights_quantized[1]->count(), bw_bias_params_, rounding, fl_bias_params_);
+          weights_quantized[1]->count(), bw_bias_params_, rounding, fl_params_+fl_layer_in_);
     }
     break;
   case QuantizationParameter_Precision_INTEGER_POWER_OF_2_WEIGHTS:

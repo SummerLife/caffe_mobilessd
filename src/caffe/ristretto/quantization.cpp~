@@ -309,11 +309,11 @@ void Quantization::Quantize2DynamicFixedPoint() {
   }
 
 
-
-  bw_conv_params_ = 16;
-  bw_fc_params_ = 16;
-  bw_out_ = 16;
-  bw_in_ = 16;
+	int bw = 10;
+  bw_conv_params_ = bw;
+  bw_fc_params_ = bw;
+  bw_out_ = bw;
+  bw_in_ = bw;
   bw_bias_ = 32;
 
   NetParameter param;
@@ -334,7 +334,7 @@ void Quantization::Quantize2DynamicFixedPoint() {
 
   net_test = new Net<float>(param);
   net_test->CopyTrainedLayersFrom(weights_);
-  RunForwardBatches(iterations_, net_test, &accuracy,true);
+  RunForwardBatches(iterations_, net_test, &accuracy);
   delete net_test;
   param.release_state();
 

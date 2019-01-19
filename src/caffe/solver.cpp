@@ -4,6 +4,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <fstream>
 
 #include "caffe/solver.hpp"
 #include "caffe/util/bbox_util.hpp"
@@ -239,7 +240,7 @@ void Solver<Dtype>::Step(int iters) {
     loss /= param_.iter_size();
     // average the loss across iterations for smoothed reporting
     UpdateSmoothedLoss(loss, start_iter, average_loss);
-    if (display) {
+    if (display && iter_ != 0) {
       LOG_IF(INFO, Caffe::root_solver()) << "Iteration " << iter_
           << ", loss = " << smoothed_loss_;
       const vector<Blob<Dtype>*>& result = net_->output_blobs();
@@ -256,7 +257,7 @@ void Solver<Dtype>::Step(int iters) {
             loss_msg_stream << " (* " << loss_weight
                             << " = " << loss_weight * result_vec[k] << " loss)";
           }
-          LOG_IF(INFO, Caffe::root_solver()) << "    Train net output #"
+            LOG_IF(INFO, Caffe::root_solver()) << "    Train net output #"
               << score_index++ << ": " << output_name << " = "
               << result_vec[k] << loss_msg_stream.str();
         }
@@ -545,6 +546,13 @@ void Solver<Dtype>::TestDetection(const int test_net_id) {
     const string& output_name = test_net->blob_names()[output_blob_index];
     LOG(INFO) << "    Test net output #" << i << ": " << output_name << " = "
               << mAP;
+    std::ofstream mAP_diff("examples/mobilessd/mAP_diff.txt",ios::app);
+    if (mAP_diff.is_open())
+    {
+    	mAP_diff << mAP << '\n';
+    	mAP_diff.close();
+    }
+
   }
 }
 
