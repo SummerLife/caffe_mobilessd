@@ -38,6 +38,8 @@ DEFINE_int32(iterations, 50,
     "Optional: The number of iterations to run.");
 DEFINE_double(error_margin, 2,
     "Optional: the allowed accuracy drop in %");
+DEFINE_string(calibration_tabel,"",
+	"Optional: the path of calibration tabel %");
 
 // A simple registry for caffe commands.
 typedef int (*BrewFunction)();
@@ -84,7 +86,7 @@ int quantize(){
   CHECK_GT(FLAGS_trimming_mode.size(), 0) << "Need trimming mode.";
   Quantization* q = new Quantization(FLAGS_model, FLAGS_weights,
       FLAGS_model_quantized, FLAGS_iterations, FLAGS_trimming_mode,
-      FLAGS_error_margin, FLAGS_gpu);
+      FLAGS_error_margin, FLAGS_gpu, FLAGS_calibration_tabel);
   q->QuantizeNet();
   delete q;
   return 0;

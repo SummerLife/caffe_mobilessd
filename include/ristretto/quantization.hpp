@@ -16,7 +16,7 @@ using caffe::Net;
 class Quantization {
 public:
   explicit Quantization(string model, string weights, string model_quantized,
-      int iterations, string trimming_mode, double error_margin, string gpus);
+      int iterations, string trimming_mode, double error_margin, string gpus,string calibration_tabel);
   void QuantizeNet();
 private:
   void CheckWritePermissions(const string path);
@@ -96,6 +96,10 @@ private:
    */
   int GetIntegerLengthOut(const string layer_name);
 
+  static bool read_int8scale_table(const char* filepath,
+			  std::map<std::string, std::vector<float> >& blob_int8scale_table,
+			  std::map<std::string, std::vector<float> >& weight_int8scale_table);
+
   string model_;
   string weights_;
   string model_quantized_;
@@ -104,6 +108,7 @@ private:
   double error_margin_;
   string gpus_;
   float test_score_baseline_;
+  string calibration_tabel;
   // The maximal absolute values of layer inputs, parameters and
   // layer outputs.
   vector<float> max_in_, max_params_, max_out_, max_bias_;

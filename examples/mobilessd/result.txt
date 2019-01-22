@@ -1,15 +1,50 @@
-Baseline 32bit float: 0.736846
-Dynamic fixed point net:
-8bit CONV weights,
-8bit FC weights,
-8bit layer activations:
-mAP:0.413369657930
-
-
-
-Baseline 32bit float: 0.736846
+Baseline 32bit float: 0.680633
 Dynamic fixed point net:
 16bit CONV weights,
 16bit FC weights,
 16bit layer activations:
-mAP:0.736846657930
+mAP: 0.680659
+
+
+Baseline 32bit float: 0.680633
+Dynamic fixed point net:
+8bit CONV weights,
+8bit FC weights,
+8bit layer activations:
+mAP: 0.268838
+
+
+Baseline 32bit float: 0.680633
+Dynamic fixed point net:
+4bit CONV weights,
+4bit FC weights,
+4bit layer activations:
+mAP: 0.000297818
+
+
+Baseline 32bit float: 0.680633
+Dynamic fixed point net:
+2bit CONV weights,
+2bit FC weights,
+2bit layer activations:
+mAP: 0.000297818
+
+
+
+
+Baseline 32bit float: 0.680633
+Dynamic fixed point net:
+16bit CONV weights,
+16bit FC weights,
+16bit layer activations:
+mAP: 0.107659
+
+
+Baseline 32bit float: 0.680633
+Dynamic fixed point net:
+8bit CONV weights,
+8bit FC weights,
+8bit layer activations:
+mAP: 0.0969328
+
+

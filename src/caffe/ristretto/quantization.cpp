@@ -15,7 +15,7 @@ using caffe::NetParameter;
 using namespace caffe;
 
 Quantization::Quantization(string model, string weights, string model_quantized,
-      int iterations, string trimming_mode, double error_margin, string gpus) {
+      int iterations, string trimming_mode, double error_margin, string gpus, string calibration_tabel) {
   this->model_ = model;
   this->weights_ = weights;
   this->model_quantized_ = model_quantized;
@@ -23,6 +23,8 @@ Quantization::Quantization(string model, string weights, string model_quantized,
   this->trimming_mode_ = trimming_mode;
   this->error_margin_ = error_margin;
   this->gpus_ = gpus;
+
+  this->calibration_tabel = calibration_tabel;
 
   // Could possibly improve choice of exponent. Experiments show LeNet needs
   // 4bits, but the saturation border is at 3bits (when assuming infinitely long
@@ -45,16 +47,20 @@ void Quantization::QuantizeNet() {
   // values. Do statistic for 10 batches.
   Net<float>* net_test = new Net<float>(model_, caffe::TRAIN);
   net_test->CopyTrainedLayersFrom(weights_);
-  RunForwardBatches(1, net_test, &accuracy, true);
+  RunForwardBatches(10, net_test, &accuracy, true);
   delete net_test;
   // Do network quantization and scoring.
-  if (trimming_mode_ == "dynamic_fixed_point") {
+  if (trimming_mode_ == "dynamic_fixed_point")
+  {
     Quantize2DynamicFixedPoint();
-  } else if (trimming_mode_ == "minifloat") {
+  }
+  else if (trimming_mode_ == "minifloat") {
     Quantize2MiniFloat();
-  } else if (trimming_mode_ == "integer_power_of_2_weights") {
+  }
+  else if (trimming_mode_ == "integer_power_of_2_weights") {
     Quantize2IntegerPowerOf2Weights();
-  } else {
+  }
+  else {
     LOG(FATAL) << "Unknown trimming mode: " << trimming_mode_;
   }
 }
@@ -293,97 +299,88 @@ void Quantization::Quantize2DynamicFixedPoint() {
   // The integer length is chosen such that no saturation occurs.
   // This approximation assumes an infinitely long factional part.
   // For layer activations, we reduce the integer length by one bit.
-  for (int i = 0; i < layer_names_.size(); ++i) {
-    il_in_.push_back((int)ceil(log2(max_in_[i]))+1);
-    il_out_.push_back((int)ceil(log2(max_out_[i]))+1);
-    il_params_.push_back((int)ceil(log2(max_params_[i]))+1);
-    il_bias_.push_back((int)ceil(log2(max_bias_[i]))+1);
-  }
+
+	if(0)
+	{
+	  for (int i = 0; i < layer_names_.size(); ++i) {
+		il_in_.push_back((int)ceil(log2(max_in_[i]))+1);
+		il_out_.push_back((int)ceil(log2(max_out_[i]))+1);
+		il_params_.push_back((int)ceil(log2(max_params_[i]))+1);
+		il_bias_.push_back((int)ceil(log2(max_bias_[i]))+1);
+	  }
+	}
+	else
+	{
+	  for (int i = 0; i < layer_names_.size(); ++i) {
+		il_in_.push_back((int)ceil(log2(max_in_[i])));
+		il_out_.push_back((int)ceil(log2(max_out_[i])));
+		il_params_.push_back((int)ceil(log2(max_params_[i])));
+		il_bias_.push_back((int)ceil(log2(max_bias_[i])));
+	  }
+	}
   // Debug
   for (int k = 0; k < layer_names_.size(); ++k) {
-    LOG(INFO) << "Layer " << layer_names_[k] <<
-        ", integer length input=" << il_in_[k] <<
-        ", integer length output=" << il_out_[k] <<
-        ", integer length parameters=" << il_params_[k]<<
+	LOG(INFO) << "Layer " << layer_names_[k] <<
+		", integer length input=" << il_in_[k] <<
+		", integer length output=" << il_out_[k] <<
+		", integer length parameters=" << il_params_[k]<<
 		", integer length bias=" << il_bias_[k];
   }
 
-  int bw = 16;
-  bw_conv_params_ = bw;
-  bw_fc_params_ = bw;
-  bw_out_ = bw;
-  bw_in_ = bw;
-  bw_bias_ = 32;
-
-  NetParameter param;
-  float accuracy;
-  Net<float>* net_test;
-
-  // Score dynamic fixed point network.
-  // This network combines dynamic fixed point parameters in convolutional and
-  // inner product layers, as well as dynamic fixed point activations.
-  caffe::ReadNetParamsFromTextFileOrDie(model_, &param);
-
-  param.mutable_state()->set_phase(caffe::TEST);
-
-
-  EditNetDescriptionDynamicFixedPoint(&param, "Convolution_and_InnerProduct",
-      "Parameters_and_Activations", bw_conv_params_, bw_fc_params_, bw_in_,
-      bw_out_, bw_bias_);
-
-  net_test = new Net<float>(param);
-  net_test->CopyTrainedLayersFrom(weights_);
-  RunForwardBatches(iterations_, net_test, &accuracy);
-  delete net_test;
-  param.release_state();
-
-  WriteProtoToTextFile(param, model_quantized_);
-/*
-  // Write summary of dynamic fixed point analysis to log
-  LOG(INFO) << "------------------------------";
-  LOG(INFO) << "Network accuracy analysis for";
-  LOG(INFO) << "Convolutional (CONV) and fully";
-  LOG(INFO) << "connected (FC) layers.";
-  LOG(INFO) << "Baseline 32bit float: " << test_score_baseline_;
-  LOG(INFO) << "Dynamic fixed point CONV";
-  LOG(INFO)  << "weights: ";
-  for (int j = 0; j < test_scores_conv_params.size(); ++j) {
-    LOG(INFO) << test_bw_conv_params[j] << "bit: \t" <<
-        test_scores_conv_params[j];
-  }
-  LOG(INFO) << "Dynamic fixed point FC";
-  LOG(INFO) << "weights: ";
-  for (int j = 0; j < test_scores_fc_params.size(); ++j) {
-    LOG(INFO) << test_bw_fc_params[j] << "bit: \t" << test_scores_fc_params[j];
-  }
-  LOG(INFO) << "Dynamic fixed point layer";
-  LOG(INFO) << "activations:";
-  for (int j = 0; j < test_scores_layer_activations.size(); ++j) {
-    LOG(INFO) << test_bw_layer_activations[j] << "bit: \t" <<
-        test_scores_layer_activations[j];
-  }
-
-*/
-  LOG(INFO) << "Baseline 32bit float: " << test_score_baseline_;
-  LOG(INFO) << "Dynamic fixed point net:";
-  LOG(INFO) << bw_conv_params_ << "bit CONV weights,";
-  LOG(INFO) << bw_fc_params_ << "bit FC weights,";
-  LOG(INFO) << bw_out_ << "bit layer activations:";
-  LOG(INFO) << "mAP: " << accuracy;
-  LOG(INFO) << "Please fine-tune.";
-
-
-  std::ofstream results("examples/mobilessd/result.txt",ios::app);
-  if (results.is_open())
+  for (int bw = 16; bw >=8 ; bw /= 2)
   {
-	  results << "Baseline 32bit float: " << test_score_baseline_<< '\n';
-	  results << "Dynamic fixed point net:"<< '\n';
-	  results << bw_conv_params_ << "bit CONV weights,"<< '\n';
-	  results << bw_fc_params_ << "bit FC weights,"<< '\n';
-	  results << bw_out_ << "bit layer activations:"<< '\n';
-	  results << "mAP: " << accuracy << '\n' << '\n' << '\n';
-	  results.close();
+  //int bw = 16;
+	  bw_conv_params_ = bw;
+	  bw_fc_params_ = bw;
+	  bw_out_ = bw;
+	  bw_in_ = bw;
+	  bw_bias_ = 32;
+
+	  NetParameter param;
+	  float accuracy;
+	  Net<float>* net_test;
+
+	  // Score dynamic fixed point network.
+	  // This network combines dynamic fixed point parameters in convolutional and
+	  // inner product layers, as well as dynamic fixed point activations.
+	  caffe::ReadNetParamsFromTextFileOrDie(model_, &param);
+
+	  param.mutable_state()->set_phase(caffe::TEST);
+
+	  EditNetDescriptionDynamicFixedPoint(&param, "Convolution_and_InnerProduct",
+		  "Parameters_and_Activations", bw_conv_params_, bw_fc_params_, bw_in_,
+		  bw_out_, bw_bias_);
+
+	  net_test = new Net<float>(param);
+	  net_test->CopyTrainedLayersFrom(weights_);
+	  RunForwardBatches(iterations_, net_test, &accuracy);
+	  delete net_test;
+	  param.release_state();
+
+	  WriteProtoToTextFile(param, model_quantized_);
+
+	  LOG(INFO) << "Baseline 32bit float: " << test_score_baseline_;
+	  LOG(INFO) << "Dynamic fixed point net:";
+	  LOG(INFO) << bw_conv_params_ << "bit CONV weights,";
+	  LOG(INFO) << bw_fc_params_ << "bit FC weights,";
+	  LOG(INFO) << bw_out_ << "bit layer activations:";
+	  LOG(INFO) << "mAP: " << accuracy;
+	  LOG(INFO) << "Please fine-tune.";
+
+
+	  std::ofstream results("examples/mobilessd/result.txt",ios::app);
+	  if (results.is_open())
+	  {
+		  results << "Baseline 32bit float: " << test_score_baseline_<< '\n';
+		  results << "Dynamic fixed point net:"<< '\n';
+		  results << bw_conv_params_ << "bit CONV weights,"<< '\n';
+		  results << bw_fc_params_ << "bit FC weights,"<< '\n';
+		  results << bw_out_ << "bit layer activations:"<< '\n';
+		  results << "mAP: " << accuracy << '\n' << '\n' << '\n';
+		  results.close();
+	  }
   }
+
 }
 
 void Quantization::Quantize2MiniFloat() {
@@ -626,4 +623,86 @@ int Quantization::GetIntegerLengthOut(const string layer_name) {
   int pos = find(layer_names_.begin(), layer_names_.end(), layer_name)
       - layer_names_.begin();
   return il_out_[pos];
+}
+
+static bool read_int8scale_table(const char* filepath,
+		std::map<std::string, std::vector<float> >& blob_int8scale_table,
+		std::map<std::string, std::vector<float> >& weight_int8scale_table)
+{
+    blob_int8scale_table.clear();
+    weight_int8scale_table.clear();
+
+    FILE* fp = fopen(filepath, "rb");
+    if (!fp)
+    {
+        fprintf(stderr, "fopen %s failed\n", filepath);
+        return false;
+    }
+
+    bool in_scale_vector = false;
+
+    std::string keystr;
+    std::vector<float> scales;
+
+    while (!feof(fp))
+    {
+        char key[256];
+        int nscan = fscanf(fp, "%255s", key);
+        if (nscan != 1)
+        {
+            break;
+        }
+
+        if (in_scale_vector)
+        {
+            float scale = 1.f;
+            int nscan = sscanf(key, "%f", &scale);
+            if (nscan == 1)
+            {
+                scales.push_back(scale);
+                continue;
+            }
+            else
+            {
+                // XYZ_param_N pattern
+                if (strstr(keystr.c_str(), "_param_"))
+                {
+                    weight_int8scale_table[ keystr ] = scales;
+                }
+                else
+                {
+                    blob_int8scale_table[ keystr ] = scales;
+                }
+
+                keystr.clear();
+                scales.clear();
+
+                in_scale_vector = false;
+            }
+        }
+
+        if (!in_scale_vector)
+        {
+            keystr = key;
+
+            in_scale_vector = true;
+        }
+    }
+
+    if (in_scale_vector)
+    {
+        // XYZ_param_N pattern
+        if (strstr(keystr.c_str(), "_param_"))
+        {
+            weight_int8scale_table[ keystr ] = scales;
+        }
+        else
+        {
+            blob_int8scale_table[ keystr ] = scales;
+        }
+    }
+
+    fclose(fp);
+
+    return true;
 }
