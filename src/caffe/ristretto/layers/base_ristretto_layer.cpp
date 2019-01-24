@@ -33,14 +33,12 @@ void BaseRistrettoLayer<Dtype>::QuantizeWeights_cpu(
   	if(int8_term_)
   	{
   		Trim2int8_data_cpu(weight, cnt_weight, weight_scale_);
-
  		if(bias_term)
   		{
   			Trim2int8_data_cpu(weights_quantized[1]->mutable_cpu_data(),
   					weights_quantized[1]->count(), weight_scale_);
   			Trim2int8_data_cpu(weights_quantized[1]->mutable_cpu_data(),
   					weights_quantized[1]->count(), data_scale_);
-
   		}
   	}
   	else{
@@ -240,16 +238,15 @@ void BaseRistrettoLayer<Dtype>::op_data(const Dtype* data,const int cnt,char* na
 template <typename Dtype>
 void BaseRistrettoLayer<Dtype>::Trim2int8_data_cpu(Dtype* data, const int cnt,
 		float scale_){
-	Dtype x =0;
 	for(int index = 0; index < cnt; ++index)
 	{
-
-/*		Dtype max_data = 127;
+/*
+		Dtype max_data = 127;
 		Dtype min_data = -128;
 		data[index] = round(data[index]*scale_);
-		data[index] = (std::max(std::min(data[index], max_data), min_data))/scale_;
+		data[index] = (std::max(std::min(data[index], max_data), min_data));
 */
-		data[index] = data[index]*2;
+		data[index] = data[index]*scale_;
 	}
 }
 
@@ -258,8 +255,18 @@ void BaseRistrettoLayer<Dtype>::Trim2int8_output_cpu(Dtype* data, const int cnt,
 		float weight_scale_, float data_scale_){
 	for(int index = 0; index < cnt; ++index)
 	{
-		data[index] = data[index]/(2*2);
-		//data[index] = data[index]/(weight_scale_*data_scale_);
+		//data[index] = data[index]/(2*2);
+		data[index] = data[index]/(weight_scale_*data_scale_);
+	}
+}
+
+template <typename Dtype>
+void BaseRistrettoLayer<Dtype>::reQuantizeLayerInputs_cpu(Dtype* data, const int count,float data_scale_)
+{
+	for(int index = 0; index < count; ++index)
+	{
+		//data[index] = data[index]/(2);
+		data[index] = data[index]/data_scale_;
 	}
 }
 
@@ -303,5 +310,8 @@ template void BaseRistrettoLayer<float>::Trim2int8_data_cpu(float* data, const i
 		float scale_);
 template void BaseRistrettoLayer<double>::Trim2int8_data_cpu(double* data, const int cnt,
 		float scale_);
-
+template void BaseRistrettoLayer<float>::reQuantizeLayerInputs_cpu(float* data,
+		const int count,float data_scale_);
+template void BaseRistrettoLayer<double>::reQuantizeLayerInputs_cpu(double* data,
+		const int count,float data_scale_);
 }  // namespace caffe

@@ -340,11 +340,11 @@ void ConvolutionRistrettoLayer<Dtype>::Forward_cpu(
 			this->op_data(top[0]->mutable_cpu_data()
 					,top[0]->count(),name);
 	   }
-	   for(int i = 0; i < bottom.size(); ++i)
+/*	   for(int i = 0; i < bottom.size(); ++i)
 	   {
-		   this->QuantizeLayerInputs_cpu(bottom[i]->mutable_cpu_data(),
-		   	            bottom[i]->count());
-	   }
+		   this->reQuantizeLayerInputs_cpu(bottom[i]->mutable_cpu_data(),
+		   	            bottom[i]->count(),this->data_scale_);
+	   }*/
 
 	   for(int i = 0; i < top.size(); ++i)
 	   {
