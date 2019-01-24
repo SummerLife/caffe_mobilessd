@@ -30,11 +30,26 @@ void BaseRistrettoLayer<Dtype>::QuantizeWeights_cpu(
     }
     break;
   case QuantizationParameter_Precision_DYNAMIC_FIXED_POINT:
-    Trim2FixedPoint_cpu(weight, cnt_weight, bw_params_, rounding, fl_params_);
-    if (bias_term) {
-      Trim2FixedPoint_cpu(weights_quantized[1]->mutable_cpu_data(),
-          weights_quantized[1]->count(), bw_bias_params_, rounding, fl_params_+fl_layer_in_);
-    }
+  	if(int8_term_)
+  	{
+  		Trim2int8_data_cpu(weight, cnt_weight, weight_scale_);
+
+ 		if(bias_term)
+  		{
+  			Trim2int8_data_cpu(weights_quantized[1]->mutable_cpu_data(),
+  					weights_quantized[1]->count(), weight_scale_);
+  			Trim2int8_data_cpu(weights_quantized[1]->mutable_cpu_data(),
+  					weights_quantized[1]->count(), data_scale_);
+
+  		}
+  	}
+  	else{
+		Trim2FixedPoint_cpu(weight, cnt_weight, bw_params_, rounding, fl_params_);
+		if (bias_term) {
+		  Trim2FixedPoint_cpu(weights_quantized[1]->mutable_cpu_data(),
+			  weights_quantized[1]->count(), bw_bias_params_, rounding, fl_params_+fl_layer_in_);
+		}
+  	}
     break;
   case QuantizationParameter_Precision_INTEGER_POWER_OF_2_WEIGHTS:
     Trim2IntegerPowerOf2_cpu(weight, cnt_weight, pow_2_min_exp_, pow_2_max_exp_,
@@ -54,7 +69,13 @@ void BaseRistrettoLayer<Dtype>::QuantizeLayerInputs_cpu(Dtype* data,
     case QuantizationParameter_Precision_INTEGER_POWER_OF_2_WEIGHTS:
       break;
     case QuantizationParameter_Precision_DYNAMIC_FIXED_POINT:
-	    Trim2FixedPoint_cpu(data, count, bw_layer_in_, rounding_, fl_layer_in_);
+    	if(int8_term_)
+    	{
+    		Trim2int8_data_cpu(data, count, data_scale_);
+    	}
+    	else{
+    		Trim2FixedPoint_cpu(data, count, bw_layer_in_, rounding_, fl_layer_in_);
+    	}
       break;
     case QuantizationParameter_Precision_MINIFLOAT:
       Trim2MiniFloat_cpu(data, count, fp_mant_, fp_exp_, rounding_);
@@ -72,7 +93,14 @@ void BaseRistrettoLayer<Dtype>::QuantizeLayerOutputs_cpu(
     case QuantizationParameter_Precision_INTEGER_POWER_OF_2_WEIGHTS:
       break;
     case QuantizationParameter_Precision_DYNAMIC_FIXED_POINT:
-      Trim2FixedPoint_cpu(data, count, bw_layer_out_, rounding_, fl_layer_out_);
+    	if(int8_term_)
+    	{
+    		Trim2int8_output_cpu(data, count, weight_scale_, data_scale_);
+    	}
+    	else
+    	{
+    		Trim2FixedPoint_cpu(data, count, bw_layer_out_, rounding_, fl_layer_out_);
+    	}
       break;
     case QuantizationParameter_Precision_MINIFLOAT:
       Trim2MiniFloat_cpu(data, count, fp_mant_, fp_exp_, rounding_);
@@ -196,17 +224,7 @@ template <typename Dtype>
 void BaseRistrettoLayer<Dtype>::op_data(const Dtype* data,const int cnt,char* name)
 {
 	char x[100];
-/*	char buffer[50];
-	getcwd(buffer, 50);
-	for(int i = 0; i < 50; i++)
-	{
-		if( '\000' == buffer[i] )
-			break;
 
-		x[i] = buffer[i];
-
-	}
-	*/
 	sprintf(x,"%s%s","/home/sun/caffe_mobile/qdata/",name);
 	std::ofstream f(x,ios::binary);
 	if(!f){
@@ -216,6 +234,32 @@ void BaseRistrettoLayer<Dtype>::op_data(const Dtype* data,const int cnt,char* na
 	{
 		f.write((char*)data,cnt*sizeof(Dtype));
 		f.close();
+	}
+}
+
+template <typename Dtype>
+void BaseRistrettoLayer<Dtype>::Trim2int8_data_cpu(Dtype* data, const int cnt,
+		float scale_){
+	Dtype x =0;
+	for(int index = 0; index < cnt; ++index)
+	{
+
+/*		Dtype max_data = 127;
+		Dtype min_data = -128;
+		data[index] = round(data[index]*scale_);
+		data[index] = (std::max(std::min(data[index], max_data), min_data))/scale_;
+*/
+		data[index] = data[index]*2;
+	}
+}
+
+template <typename Dtype>
+void BaseRistrettoLayer<Dtype>::Trim2int8_output_cpu(Dtype* data, const int cnt,
+		float weight_scale_, float data_scale_){
+	for(int index = 0; index < cnt; ++index)
+	{
+		data[index] = data[index]/(2*2);
+		//data[index] = data[index]/(weight_scale_*data_scale_);
 	}
 }
 
@@ -250,5 +294,14 @@ template void BaseRistrettoLayer<float>::Trim2IntegerPowerOf2_cpu(float* data,
     const int cnt, const int min_exp, const int max_exp, const int rounding);
 template double BaseRistrettoLayer<double>::RandUniform_cpu();
 template double BaseRistrettoLayer<float>::RandUniform_cpu();
+
+template void BaseRistrettoLayer<float>::Trim2int8_output_cpu(float* data, const int cnt,
+		float weight_scale_, float data_scale_);
+template void BaseRistrettoLayer<double>::Trim2int8_output_cpu(double* data, const int cnt,
+		float weight_scale_, float data_scale_);
+template void BaseRistrettoLayer<float>::Trim2int8_data_cpu(float* data, const int cnt,
+		float scale_);
+template void BaseRistrettoLayer<double>::Trim2int8_data_cpu(double* data, const int cnt,
+		float scale_);
 
 }  // namespace caffe

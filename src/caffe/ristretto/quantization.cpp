@@ -5,6 +5,7 @@
 #include "caffe/util/bbox_util.hpp"
 
 
+
 using caffe::Caffe;
 using caffe::Net;
 using caffe::string;
@@ -35,33 +36,40 @@ Quantization::Quantization(string model, string weights, string model_quantized,
 void Quantization::QuantizeNet() {
   CheckWritePermissions(model_quantized_);
   SetGpu();
-  // Run the reference floating point network on validation set to find baseline
-  // accuracy.
-  Net<float>* net_val = new Net<float>(model_, caffe::TEST);
-  net_val->CopyTrainedLayersFrom(weights_);
-  float accuracy;
-  RunForwardBatches(this->iterations_, net_val, &accuracy);
-  test_score_baseline_ = accuracy;
-  delete net_val;
-  // Run the reference floating point network on train data set to find maximum
-  // values. Do statistic for 10 batches.
-  Net<float>* net_test = new Net<float>(model_, caffe::TRAIN);
-  net_test->CopyTrainedLayersFrom(weights_);
-  RunForwardBatches(10, net_test, &accuracy, true);
-  delete net_test;
-  // Do network quantization and scoring.
-  if (trimming_mode_ == "dynamic_fixed_point")
+  if(calibration_tabel != "")
   {
-    Quantize2DynamicFixedPoint();
+	  Quantize2int8();
   }
-  else if (trimming_mode_ == "minifloat") {
-    Quantize2MiniFloat();
-  }
-  else if (trimming_mode_ == "integer_power_of_2_weights") {
-    Quantize2IntegerPowerOf2Weights();
-  }
-  else {
-    LOG(FATAL) << "Unknown trimming mode: " << trimming_mode_;
+  else
+  {
+	  // Run the reference floating point network on validation set to find baseline
+	  // accuracy.
+	  Net<float>* net_val = new Net<float>(model_, caffe::TEST);
+	  net_val->CopyTrainedLayersFrom(weights_);
+	  float accuracy;
+	  RunForwardBatches(this->iterations_, net_val, &accuracy);
+	  test_score_baseline_ = accuracy;
+	  delete net_val;
+	  // Run the reference floating point network on train data set to find maximum
+	  // values. Do statistic for 10 batches.
+	  Net<float>* net_test = new Net<float>(model_, caffe::TRAIN);
+	  net_test->CopyTrainedLayersFrom(weights_);
+	  RunForwardBatches(1, net_test, &accuracy, true);
+	  delete net_test;
+	  // Do network quantization and scoring.
+	  if (trimming_mode_ == "dynamic_fixed_point")
+	  {
+	    Quantize2DynamicFixedPoint();
+	  }
+	  else if (trimming_mode_ == "minifloat") {
+		Quantize2MiniFloat();
+	  }
+	  else if (trimming_mode_ == "integer_power_of_2_weights") {
+		Quantize2IntegerPowerOf2Weights();
+	  }
+	  else {
+		LOG(FATAL) << "Unknown trimming mode: " << trimming_mode_;
+	  }
   }
 }
 
@@ -382,6 +390,42 @@ void Quantization::Quantize2DynamicFixedPoint() {
   }
 
 }
+void Quantization::Quantize2int8(){
+
+		Net<float>* net_val = new Net<float>(model_, caffe::TEST);
+		net_val->CopyTrainedLayersFrom(weights_);
+		RunForwardBatches(this->iterations_, net_val, &test_score_baseline_);;
+		delete net_val;
+
+	  NetParameter param;
+	  float accuracy = 0;
+	  Net<float>* net_test;
+	  caffe::ReadNetParamsFromTextFileOrDie(model_, &param);
+
+
+	  param.mutable_state()->set_phase(caffe::TEST);
+
+	  std::map<std::string, std::vector<float> > blob_int8scale_table;
+	  std::map<std::string, std::vector<float> > weight_int8scale_table;
+	  const char* filepath = this->calibration_tabel.c_str();
+	  bool a = read_int8scale_table(filepath, blob_int8scale_table, weight_int8scale_table);
+	  if(!a)
+	  {
+          fprintf(stderr, "read_int8scale_table failed\n");
+	  }
+
+	  EditNetDescription2int8(&param, blob_int8scale_table, weight_int8scale_table);
+
+	  net_test = new Net<float>(param);
+	  net_test->CopyTrainedLayersFrom(weights_);
+	  RunForwardBatches(iterations_, net_test, &accuracy);
+	  delete net_test;
+	  param.release_state();
+
+	  WriteProtoToTextFile(param, model_quantized_);
+	  LOG(INFO) << "Baseline 32bit float: " << test_score_baseline_;
+	  LOG(INFO) << "mAP: " << accuracy;
+}
 
 void Quantization::Quantize2MiniFloat() {
   // Find the necessary amount of exponent bits.
@@ -482,6 +526,43 @@ void Quantization::Quantize2IntegerPowerOf2Weights() {
   LOG(INFO) << "Quantized net:";
   LOG(INFO) << "4bit: \t" << accuracy;
   LOG(INFO) << "Please fine-tune.";
+}
+
+
+
+
+void Quantization::EditNetDescription2int8(NetParameter* param,
+		std::map<std::string, std::vector<float> >& blob_int8scale_table,
+		std::map<std::string, std::vector<float> >& weight_int8scale_table)
+{
+  for (int i = 0; i < param->layer_size(); ++i) {
+    // if this is a convolutional layer which should be quantized ...
+    if (param->layer(i).type().find("Convolution") != string::npos) {
+      // quantize parameters
+        LayerParameter* param_layer = param->mutable_layer(i);
+        param_layer->set_type("ConvolutionRistretto");
+
+        std::vector<float> weight_int8scale;
+        std::vector<float> blob_int8scale;
+
+        char key[256];
+        sprintf(key, "%s_param_0", param_layer->name().c_str());
+        if (weight_int8scale_table.find(std::string(key)) != weight_int8scale_table.end())
+		{
+		  weight_int8scale = weight_int8scale_table[std::string(key)];
+		}
+
+		if (blob_int8scale_table.find(param_layer->name()) != blob_int8scale_table.end())
+		{
+		  blob_int8scale = blob_int8scale_table[param_layer->name()];
+		}
+
+        param_layer->mutable_quantization_param()->set_weight_scale( weight_int8scale[0]);
+        param_layer->mutable_quantization_param()->set_data_scale(blob_int8scale[0]);
+        param_layer->mutable_quantization_param()->set_int8_term(true);
+
+    }
+  }
 }
 
 void Quantization::EditNetDescriptionDynamicFixedPoint(NetParameter* param,
@@ -625,7 +706,7 @@ int Quantization::GetIntegerLengthOut(const string layer_name) {
   return il_out_[pos];
 }
 
-static bool read_int8scale_table(const char* filepath,
+bool Quantization::read_int8scale_table(const char* filepath,
 		std::map<std::string, std::vector<float> >& blob_int8scale_table,
 		std::map<std::string, std::vector<float> >& weight_int8scale_table)
 {

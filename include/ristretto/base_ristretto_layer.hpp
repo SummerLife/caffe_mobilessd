@@ -59,6 +59,9 @@ class BaseRistrettoLayer{
   /**
    * @brief Generate random number in [0,1) range.
    */
+  void Trim2int8_output_cpu(Dtype* data, const int cnt, float weight_scale_, float data_scale_);
+  void Trim2int8_data_cpu(Dtype* data, const int cnt, float scale_);
+
   inline double RandUniform_cpu();
   // The number of bits used for dynamic fixed point parameters and layer
   // activations.
@@ -74,6 +77,9 @@ class BaseRistrettoLayer{
   int rounding_, precision_;
   // For parameter layers: reduced word with parameters.
   vector<shared_ptr<Blob<Dtype> > > weights_quantized_;
+  //xyx add for int8
+  float weight_scale_, data_scale_;
+  bool int8_term_;
 };
 
 /**

@@ -2,10 +2,14 @@
 #define QUANTIZATION_HPP_
 
 #include "caffe/caffe.hpp"
+#include<vector>
+
 
 using caffe::string;
 using caffe::vector;
 using caffe::Net;
+
+using namespace std;
 
 /**
  * @brief Approximate 32-bit floating point networks.
@@ -96,9 +100,13 @@ private:
    */
   int GetIntegerLengthOut(const string layer_name);
 
-  static bool read_int8scale_table(const char* filepath,
+  bool read_int8scale_table(const char* filepath,
 			  std::map<std::string, std::vector<float> >& blob_int8scale_table,
 			  std::map<std::string, std::vector<float> >& weight_int8scale_table);
+  void Quantize2int8();
+  void EditNetDescription2int8(caffe::NetParameter* param,
+			std::map<std::string, std::vector<float> >& blob_int8scale_table,
+			std::map<std::string, std::vector<float> >& weight_int8scale_table);
 
   string model_;
   string weights_;
