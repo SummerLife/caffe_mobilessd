@@ -563,11 +563,31 @@ void Blob<float>::ToProto(BlobProto* proto, bool write_diff) const {
     }
   }
 }
+template <>
+void Blob<short>::ToProto(BlobProto* proto, bool write_diff) const {/*
+  proto->clear_shape();
+  for (int i = 0; i < shape_.size(); ++i) {
+    proto->mutable_shape()->add_dim(shape_[i]);
+  }
+  proto->clear_double_data();
+  proto->clear_double_diff();
+  const double* data_vec = cpu_data();
+  for (int i = 0; i < count_; ++i) {
+    proto->add_double_data(data_vec[i]);
+  }
+  if (write_diff) {
+    const double* diff_vec = cpu_diff();
+    for (int i = 0; i < count_; ++i) {
+      proto->add_double_diff(diff_vec[i]);
+    }
+  }*/
+}
 
 INSTANTIATE_CLASS(Blob);
 template class Blob<bool>;
 template class Blob<int>;
 template class Blob<unsigned int>;
+template class Blob<short>;
 
 }  // namespace caffe
 

@@ -220,11 +220,27 @@ void ConvolutionRistrettoLayer<Dtype>::LayerSetUp(
   // Propagate gradients to the parameters (as directed by backward pass).
   this->param_propagate_down_.resize(this->blobs_.size(), true);
   // Prepare quantized weights
-  this->weights_quantized_.resize(2);
+  this->weights_quantized_.resize(2+bottom.size());
   this->weights_quantized_[0].reset(new Blob<Dtype>(weight_shape));
   if (this->bias_term_) {
       this->weights_quantized_[1].reset(new Blob<Dtype>(bias_shape));
   }
+
+  for(int i = 0; i < bottom.size(); ++i)
+  {
+	  vector<int> shape_bottom = bottom[i]->shape();
+	  this->weights_quantized_[i+2].reset(new Blob<Dtype>(shape_bottom));
+  }
+
+
+/*  this->data_quantized_.resize(bottom.size());
+  for(int i = 0; i < bottom.size(); ++i)
+  {
+	  vector<int> shape_bottom = bottom[i]->shape();
+	  this->data_quantized_[i].reset(new Blob<Dtype>(shape_bottom));
+  }*/
+
+
 }
 
 
@@ -280,8 +296,15 @@ void ConvolutionRistrettoLayer<Dtype>::Forward_cpu(
   if(this->int8_term_)
   {
 	  for (int i = 0; i < bottom.size(); ++i) {
+		  caffe_copy(bottom[i]->count(), bottom[i]->cpu_data(),
+		       this->weights_quantized_[i+2]->mutable_cpu_data());
+
+	        this->QuantizeLayerInputs_cpu(this->weights_quantized_[i+2]->mutable_cpu_data(),
+	            bottom[i]->count());// because this bottom can also be others input.
+/*
 	        this->QuantizeLayerInputs_cpu(bottom[i]->mutable_cpu_data(),
-	            bottom[i]->count());
+	            bottom[i]->count());*/
+
 	  }
 
 	  caffe_copy(this->blobs_[0]->count(), this->blobs_[0]->cpu_data(),
@@ -295,70 +318,43 @@ void ConvolutionRistrettoLayer<Dtype>::Forward_cpu(
 	       QuantizationParameter_Rounding_STOCHASTIC;
 
 	   this->QuantizeWeights_cpu(this->weights_quantized_, rounding,
-	       this->bias_term_);
+			   false);
 
 	   // Do forward propagation
 	   const Dtype* weight = this->weights_quantized_[0]->cpu_data();
 
-		string layer_name = this->layer_param_.name();
-		string::size_type Pos = 0;
-		while( (Pos = layer_name.find('/',Pos)) != string::npos){
-			layer_name.replace(Pos,1,"_");
-		}
 
-	   if(layer_name == "conv0")
-	   {
-			char name[100];
-			sprintf(name,"%s%s%s",layer_name.data(),"_input_conv_weight*1",".dat");
-			this->op_data(this->weights_quantized_[0]->cpu_data(),
-					this->weights_quantized_[0]->count(),name);
-			sprintf(name,"%s%s%s",layer_name.data(),"_input_conv_input*1",".dat");
-			this->op_data(bottom[0]->mutable_cpu_data(),
-					bottom[0]->count(),name);
-	   }
 
 	   for (int i = 0; i < bottom.size(); ++i)
 	   {
-		   const Dtype* bottom_data = bottom[i]->cpu_data();
+//		   const Dtype* bottom_data = bottom[i]->cpu_data();
+		   const Dtype* bottom_data = this->weights_quantized_[i+2]->cpu_data();
 		   Dtype* top_data = top[i]->mutable_cpu_data();
 		   for (int n = 0; n < this->num_; ++n)
 		   {
 			  this->forward_cpu_gemm(bottom_data + n * this->bottom_dim_, weight,
 				  top_data + n * this->top_dim_);
+		   }
+
+		   for(int i = 0; i < top.size(); ++i)
+		   {
+			   Dtype* top_data = top[i]->mutable_cpu_data();
+			   this->QuantizeLayerOutputs_cpu(top_data,top[i]->count());
+		   }
+
+		   for (int n = 0; n < this->num_; ++n)
+		   {
 			  if (this->bias_term_)
 			  {
 				const Dtype* bias = this->weights_quantized_[1]->cpu_data();
 				this->forward_cpu_bias(top_data + n * this->top_dim_, bias);
 			  }
-	     }
+		   }
 	   }
 
-	   if(layer_name == "conv0")
-	   {
-			char name[100];
-			sprintf(name,"%s%s%s",layer_name.data(),"_output_conv*1",".dat");
-			this->op_data(top[0]->mutable_cpu_data()
-					,top[0]->count(),name);
-	   }
-/*	   for(int i = 0; i < bottom.size(); ++i)
-	   {
-		   this->reQuantizeLayerInputs_cpu(bottom[i]->mutable_cpu_data(),
-		   	            bottom[i]->count(),this->data_scale_);
-	   }*/
 
-	   for(int i = 0; i < top.size(); ++i)
-	   {
-		   Dtype* top_data = top[i]->mutable_cpu_data();
-		   this->QuantizeLayerOutputs_cpu(top_data,top[i]->count());
-	   }
 
-	   if(layer_name == "conv0")
-	   {
-			char name[100];
-			sprintf(name,"%s%s%s",layer_name.data(),"_output_rq_conv*1",".dat");
-			this->op_data(top[0]->mutable_cpu_data()
-					,top[0]->count(),name);
-	   }
+
   }
   else
   {

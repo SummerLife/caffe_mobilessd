@@ -23,5 +23,6 @@ void Layer<Dtype>::Unlock() {
 }
 
 INSTANTIATE_CLASS(Layer);
+template class Layer<short>;
 
 }  // namespace caffe

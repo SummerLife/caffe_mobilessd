@@ -18,4 +18,8 @@
 #include "caffe/util/io.hpp"
 #include "caffe/util/upgrade_proto.hpp"
 
+//void CopyLayers(caffe::Solver<float>* solver, const std::string& model_list);
+
 #endif  // CAFFE_CAFFE_HPP_
+
+

@@ -308,24 +308,12 @@ void Quantization::Quantize2DynamicFixedPoint() {
   // This approximation assumes an infinitely long factional part.
   // For layer activations, we reduce the integer length by one bit.
 
-	if(0)
-	{
 	  for (int i = 0; i < layer_names_.size(); ++i) {
 		il_in_.push_back((int)ceil(log2(max_in_[i]))+1);
 		il_out_.push_back((int)ceil(log2(max_out_[i]))+1);
 		il_params_.push_back((int)ceil(log2(max_params_[i]))+1);
 		il_bias_.push_back((int)ceil(log2(max_bias_[i]))+1);
 	  }
-	}
-	else
-	{
-	  for (int i = 0; i < layer_names_.size(); ++i) {
-		il_in_.push_back((int)ceil(log2(max_in_[i])));
-		il_out_.push_back((int)ceil(log2(max_out_[i])));
-		il_params_.push_back((int)ceil(log2(max_params_[i])));
-		il_bias_.push_back((int)ceil(log2(max_bias_[i])));
-	  }
-	}
   // Debug
   for (int k = 0; k < layer_names_.size(); ++k) {
 	LOG(INFO) << "Layer " << layer_names_[k] <<
@@ -335,9 +323,8 @@ void Quantization::Quantize2DynamicFixedPoint() {
 		", integer length bias=" << il_bias_[k];
   }
 
-  for (int bw = 16; bw >=8 ; bw /= 2)
-  {
-  //int bw = 16;
+
+  	  int bw = 16;
 	  bw_conv_params_ = bw;
 	  bw_fc_params_ = bw;
 	  bw_out_ = bw;
@@ -387,7 +374,6 @@ void Quantization::Quantize2DynamicFixedPoint() {
 		  results << "mAP: " << accuracy << '\n' << '\n' << '\n';
 		  results.close();
 	  }
-  }
 
 }
 void Quantization::Quantize2int8(){
@@ -425,6 +411,14 @@ void Quantization::Quantize2int8(){
 	  WriteProtoToTextFile(param, model_quantized_);
 	  LOG(INFO) << "Baseline 32bit float: " << test_score_baseline_;
 	  LOG(INFO) << "mAP: " << accuracy;
+
+	  std::ofstream results("examples/mobilessd/result.txt",ios::app);
+	  if (results.is_open())
+	  {
+		  results << "Baseline 32bit float: " << test_score_baseline_<< '\n';
+		  results << "mAP: " << accuracy << '\n' << '\n' << '\n';
+		  results.close();
+	  }
 }
 
 void Quantization::Quantize2MiniFloat() {

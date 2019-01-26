@@ -1112,5 +1112,6 @@ const shared_ptr<Layer<Dtype> > Net<Dtype>::layer_by_name(
 }
 
 INSTANTIATE_CLASS(Net);
+template class Net<short>;
 
 }  // namespace caffe
