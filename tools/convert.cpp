@@ -1,5 +1,6 @@
 #include <gflags/gflags.h>
 #include <glog/logging.h>
+#include <string.h>
 
 #include <cstring>
 #include <map>
@@ -57,18 +58,6 @@ void convert()
 	caffe::SolverParameter solver_param;
 	caffe::ReadSolverParamsFromTextFileOrDie(FLAGS_solver, &solver_param);
 
-	LOG(INFO) << "Use CPU.";
-	Caffe::set_mode(Caffe::CPU);
-
-	shared_ptr<caffe::Solver<float> >
-		solver(caffe::SolverRegistry<float>::CreateSolver(solver_param));
-	if (FLAGS_snapshot.size()) {
-		LOG(INFO) << "Resuming from " << FLAGS_snapshot;
-		solver->Restore(FLAGS_snapshot.c_str());
-	}
-	else if (FLAGS_weights.size()) {
-		CopyLayers(solver.get(), FLAGS_weights);
-	}
 
 	caffe::NetParameter net_param;
 	if(solver_param.has_train_net())
@@ -78,17 +67,23 @@ void convert()
 		    ReadNetParamsFromTextFileOrDie(solver_param.train_net(), &net_param);
 	}
 
+	net_param.mutable_state()->set_phase(caffe::TEST);
+
 	Net<float>* net_float32;
 	net_float32 = new Net<float>(net_param);
-	Net<short>* net_int16;
-	net_int16 = new Net<short>(net_param);
 	net_float32->CopyTrainedLayersFrom(FLAGS_weights);
 
 
+	vector<shared_ptr<Layer<float> > > layers_float32 = net_float32->layers();
+	for(int index = 0; index < layers_float32.size(); ++index)
+	{
+		if(strcmp(layers_float32[index]->type(), "Convolution") == 0)
+		{
 
+		}
+	}
 
-
-
+	LOG(INFO)<<"OK" << std::endl;
 
 }
 
@@ -98,17 +93,11 @@ int main(int argc, char** argv) {
   FLAGS_alsologtostderr = 1;
   // Set version
   gflags::SetVersionString(AS_STRING(CAFFE_VERSION));
-  // Usage message.
-  gflags::SetUsageMessage("command line brew\n"
-      "usage: ristretto <command> <args>\n\n"
-      "commands:\n"
-      "  quantize        Trim 32bit floating point net\n");
   // Run tool or show usage.
   caffe::GlobalInit(&argc, &argv);
   if (argc == 2) {
       convert();
-  } else {
-      gflags::ShowUsageWithFlagsRestrict(argv[0], "tools/ristretto");
   }
+  return 0;
 }
     

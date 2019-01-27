@@ -90,7 +90,7 @@ void BaseRistrettoLayer<Dtype>::QuantizeLayerOutputs_cpu(
     	}
     	else
     	{
-    		Trim2FixedPoint_cpu(data, count, bw_layer_out_, rounding_, fl_layer_out_);
+    		reQuantize_cpu(data, count, fl_params_+fl_layer_in_);
     	}
       break;
     case QuantizationParameter_Precision_MINIFLOAT:
@@ -105,26 +105,27 @@ void BaseRistrettoLayer<Dtype>::QuantizeLayerOutputs_cpu(
 template <typename Dtype>
 void BaseRistrettoLayer<Dtype>::Trim2FixedPoint_cpu(Dtype* data, const int cnt,
       const int bit_width, const int rounding, int fl) {
-  for (int index = 0; index < cnt; ++index) {
-    // Saturate data
+  for (int index = 0; index < cnt; ++index)
+  {
+		// Saturate data
 
-    Dtype max_data = (pow(2, bit_width - 1) - 1) * pow(2, -fl);
-    Dtype min_data = -pow(2, bit_width - 1) * pow(2, -fl);
-    data[index] = std::max(std::min(data[index], max_data), min_data);
-    // Round data
+		Dtype max_data = (pow(2, bit_width - 1) - 1) * pow(2, -fl);
+		Dtype min_data = -pow(2, bit_width - 1) * pow(2, -fl);
+		data[index] = std::max(std::min(data[index], max_data), min_data);
+		// Round data
 
-    data[index] /= pow(2, -fl);
-    switch (rounding) {
-    case QuantizationParameter_Rounding_NEAREST:
-      data[index] = round(data[index]);
-      break;
-    case QuantizationParameter_Rounding_STOCHASTIC:
-      data[index] = floor(data[index] + RandUniform_cpu());
-      break;
-    default:
-      break;
-    }
-    data[index] *= pow(2, -fl); 
+		data[index] /= pow(2, -fl);
+		switch (rounding) {
+		case QuantizationParameter_Rounding_NEAREST:
+		  data[index] = round(data[index]);
+		  break;
+		case QuantizationParameter_Rounding_STOCHASTIC:
+		  data[index] = floor(data[index] + RandUniform_cpu());
+		  break;
+		default:
+		  break;
+		}
+		//data[index] *= pow(2, -fl);
 
 	}
 
@@ -228,6 +229,7 @@ void BaseRistrettoLayer<Dtype>::op_data(const Dtype* data,const int cnt,char* na
 	}
 }
 
+
 template <typename Dtype>
 void BaseRistrettoLayer<Dtype>::Trim2int8_data_cpu(Dtype* data, const int cnt,
 		float scale_){
@@ -252,17 +254,17 @@ void BaseRistrettoLayer<Dtype>::Trim2int8_output_cpu(Dtype* data, const int cnt,
 		data[index] = data[index]/(weight_scale_* data_scale_);
 	}
 }
-/*
+
 template <typename Dtype>
-void BaseRistrettoLayer<Dtype>::reQuantizeLayerInputs_cpu(Dtype* data, const int count,float data_scale_)
+void BaseRistrettoLayer<Dtype>::reQuantize_cpu(Dtype* data, const int count,const int fl)
 {
 	for(int index = 0; index < count; ++index)
 	{
-		//data[index] = data[index]/(2);
-		data[index] = data[index]/data_scale_;
+
+		data[index] *= pow(2, -fl);
 	}
 }
-*/
+
 
 template BaseRistrettoLayer<double>::BaseRistrettoLayer();
 template BaseRistrettoLayer<float>::BaseRistrettoLayer();
@@ -303,9 +305,9 @@ template void BaseRistrettoLayer<float>::Trim2int8_data_cpu(float* data, const i
 		float scale_);
 template void BaseRistrettoLayer<double>::Trim2int8_data_cpu(double* data, const int cnt,
 		float scale_);
-/*
-template void BaseRistrettoLayer<float>::reQuantizeLayerInputs_cpu(float* data,
-		const int count,float data_scale_);
-template void BaseRistrettoLayer<double>::reQuantizeLayerInputs_cpu(double* data,
-		const int count,float data_scale_);*/
+
+template void BaseRistrettoLayer<float>::reQuantize_cpu(float* data,
+		const int count,int fl);
+template void BaseRistrettoLayer<double>::reQuantize_cpu(double* data,
+		const int count,int fl);
 }  // namespace caffe

@@ -62,6 +62,7 @@ class BaseRistrettoLayer{
   void Trim2int8_output_cpu(Dtype* data, const int cnt, float weight_scale_, float data_scale_);
   void Trim2int8_data_cpu(Dtype* data, const int cnt, float scale_);
 //  void reQuantizeLayerInputs_cpu(Dtype* data, const int count,float data_scale_);
+  void reQuantize_cpu(Dtype* data, const int count, int fl);
 
   inline double RandUniform_cpu();
   // The number of bits used for dynamic fixed point parameters and layer
@@ -92,7 +93,7 @@ class ConvolutionRistrettoLayer : public ConvolutionLayer<Dtype>,
  public:
   explicit ConvolutionRistrettoLayer(const LayerParameter& param);
   virtual inline const char* type() const { return "ConvolutionRistretto"; }
-
+  void op_int_weight(const Dtype* data,const int cnt,char* name);
  protected:
   void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
       const vector<Blob<Dtype>*>& top);

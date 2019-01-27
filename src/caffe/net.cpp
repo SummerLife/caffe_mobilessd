@@ -421,26 +421,26 @@ void Net<Dtype>::RangeInLayers(vector<string>* layer_name,
 		BaseConvolutionLayer<Dtype>* d = dynamic_cast<BaseConvolutionLayer<Dtype>*>(layers_[layer_id].get());
 
 		max_val = findMax(bottom_vecs_[layer_id][0]);
-//	  max_val = findMax (d->blobs()[0].get());
-      max_in->at(index) = std::max(max_in->at(index), max_val);
-      max_val = findMax(top_vecs_[layer_id][0]);
-      max_out->at(index) = std::max(max_out->at(index), max_val);
-      // Consider the weights only, ignore the bias
+//		max_val = findMax (d->blobs()[0].get());
+		max_in->at(index) = std::max(max_in->at(index), max_val);
+		max_val = findMax(top_vecs_[layer_id][0]);
+		max_out->at(index) = std::max(max_out->at(index), max_val);
+// Consider the weights only, ignore the bias
 //      max_val = findMax(&(*layers_[layer_id]->blobs()[0]));
-	  max_val = findMax (d->blobs()[0].get());
-	  max_param->at(index) = std::max(max_param->at(index), max_val);
-
+		max_val = findMax (d->blobs()[0].get());
+		max_param->at(index) = std::max(max_param->at(index), max_val);
+/*
 		string layer_name_xyx = layer_name->at(index);
-    string::size_type Pos = 0;
-    while( (Pos = layer_name_xyx.find('/',Pos)) != string::npos){
-    layer_name_xyx.replace(Pos,1,"_");
-    }
-    //char * layer_name = "1";
-    char str[][20] ={"_weight_","_weight_q_","_",".dat"};
-    char name[100];
+		string::size_type Pos = 0;
+		while( (Pos = layer_name_xyx.find('/',Pos)) != string::npos){
+		layer_name_xyx.replace(Pos,1,"_");
+		}
+		//char * layer_name = "1";
+		char str[][20] ={"_weight_","_weight_q_","_",".dat"};
+		char name[100];
 		char x[100];
-//		Blob<Dtype>* blob = &(*layers_[layer_id]->blobs()[0]);
-    sprintf(name,"%s%s%f%s",layer_name_xyx.data(),str[0],max_val,str[3]);
+		//		Blob<Dtype>* blob = &(*layers_[layer_id]->blobs()[0]);
+		sprintf(name,"%s%s%f%s",layer_name_xyx.data(),str[0],max_val,str[3]);
 		
 		sprintf(x,"%s%s","/home/sun/caffe_mobile/test_data/",name);
 		std::ofstream f(x,ios::binary);
@@ -452,9 +452,8 @@ void Net<Dtype>::RangeInLayers(vector<string>* layer_name,
 				f.write((char*)d->blobs()[0].get(),d->blobs()[0].get()->count ()*sizeof(Dtype));
 				f.close();
 		}
-
+*/
 				
-	  //max_val = findMax(&(*d->blobs()[0]));
 		
 	  bool state = d->return_bias_term_();
 	  if(state){
@@ -464,32 +463,6 @@ void Net<Dtype>::RangeInLayers(vector<string>* layer_name,
       index++;
     }
   }
-/*
-	index = 0;
-for (int layer_id = 0; layer_id < layers_.size(); ++layer_id) {
-  if(strcmp(layers_[layer_id]->type(), "ConvolutionRistretto") == 0){
-    ConvolutionRistrettoLayer<Dtype>* d = dynamic_cast<ConvolutionRistrettoLayer<Dtype>*>(layers_[layer_id].get());
-    string layer_name_xyx = layer_name->at(layer_id);
-    string::size_type Pos = 0;
-  
-    while( (Pos = layer_name_xyx.find('/',Pos)) != string::npos){
-    layer_name_xyx.replace(Pos,1,"_");
-    }
-    //char * layer_name = "1";
-    char str[][20] ={"_weight_","_weight_q_","_",".dat"};
-    char name[100];
-
-	Blob<Dtype>* blob = &(*layers_[layer_id]->blobs()[0]);
-    sprintf(name,"%s%s%s",layer_name_xyx.data(),str[0],str[3]);
-    d->op_data(blob->cpu_data(), blob->count(),name);
-
-	max_val = findMax (d->blobs()[0].get());
-	max_param->at(index) = std::max(max_param->at(index), max_val);
-	index++;
-  }
-
-}	
-*/	
 }
 
 
