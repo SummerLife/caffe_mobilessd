@@ -176,7 +176,9 @@ void BaseConvolutionLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& bottom,
       bias_filler->Fill(this->blobs_[1].get());
     }
   }
+  // get the number of data from the dim1 to dim3, it is also the number of every kernal.
   kernel_dim_ = this->blobs_[0]->count(1);
+  //conv_out_channels_ is num_output_
   weight_offset_ = conv_out_channels_ * kernel_dim_ / group_;
   // Propagate gradients to the parameters (as directed by backward pass).
   this->param_propagate_down_.resize(this->blobs_.size(), true);

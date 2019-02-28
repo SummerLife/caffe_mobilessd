@@ -340,12 +340,14 @@ void ConvolutionRistrettoLayer<Dtype>::Forward_cpu(
 	  this->op_data(this->weights_quantized_[0]->cpu_data()
 					,this->weights_quantized_[0]->count(),name);
 */
+
 	  char name[100];
 	  sprintf(name,"%s","int16_no_bn.caffemodel");
 	  this->op_int_weight(this->weights_quantized_[0]->cpu_data()
 				,this->weights_quantized_[0]->count(),name);
 	  this->op_int_weight(this->weights_quantized_[1]->cpu_data()
 	  				,this->weights_quantized_[1]->count(),name);
+
 	  // Do forward propagation
 	  const Dtype* weight = this->weights_quantized_[0]->cpu_data();
 	  for (int i = 0; i < bottom.size(); ++i) {

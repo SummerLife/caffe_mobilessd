@@ -188,14 +188,9 @@ layer {
     }
   }
   quantization_param {
-    bw_layer_in: 16
-    bw_layer_out: 16
-    bw_params: 16
-    fl_layer_in: 15
-    fl_layer_out: 10
-    fl_params: 12
-    fl_bias_params: 28
-    bw_bias_params: 32
+    weight_scale: 27.134331
+    data_scale: 127.09531
+    int8_term: true
   }
 }
 layer {
@@ -224,14 +219,9 @@ layer {
     }
   }
   quantization_param {
-    bw_layer_in: 16
-    bw_layer_out: 16
-    bw_params: 16
-    fl_layer_in: 10
-    fl_layer_out: 9
-    fl_params: 12
-    fl_bias_params: 28
-    bw_bias_params: 32
+    weight_scale: 23.294437
+    data_scale: 12.140777
+    int8_term: true
   }
 }
 layer {
@@ -258,14 +248,9 @@ layer {
     }
   }
   quantization_param {
-    bw_layer_in: 16
-    bw_layer_out: 16
-    bw_params: 16
-    fl_layer_in: 9
-    fl_layer_out: 7
-    fl_params: 12
-    fl_bias_params: 25
-    bw_bias_params: 32
+    weight_scale: 21.942568
+    data_scale: 7.7601585
+    int8_term: true
   }
 }
 layer {
@@ -295,14 +280,9 @@ layer {
     }
   }
   quantization_param {
-    bw_layer_in: 16
-    bw_layer_out: 16
-    bw_params: 16
-    fl_layer_in: 7
-    fl_layer_out: 10
-    fl_params: 12
-    fl_bias_params: 26
-    bw_bias_params: 32
+    weight_scale: 19.692831
+    data_scale: 2.0261784
+    int8_term: true
   }
 }
 layer {
@@ -329,14 +309,9 @@ layer {
     }
   }
   quantization_param {
-    bw_layer_in: 16
-    bw_layer_out: 16
-    bw_params: 16
-    fl_layer_in: 10
-    fl_layer_out: 9
-    fl_params: 13
-    fl_bias_params: 26
-    bw_bias_params: 32
+    weight_scale: 48.8967
+    data_scale: 12.320522
+    int8_term: true
   }
 }
 layer {
@@ -365,14 +340,9 @@ layer {
     }
   }
   quantization_param {
-    bw_layer_in: 16
-    bw_layer_out: 16
-    bw_params: 16
-    fl_layer_in: 9
-    fl_layer_out: 9
-    fl_params: 12
-    fl_bias_params: 27
-    bw_bias_params: 32
+    weight_scale: 21.439035
+    data_scale: 4.2913885
+    int8_term: true
   }
 }
 layer {
@@ -399,14 +369,9 @@ layer {
     }
   }
   quantization_param {
-    bw_layer_in: 16
-    bw_layer_out: 16
-    bw_params: 16
-    fl_layer_in: 9
-    fl_layer_out: 9
-    fl_params: 13
-    fl_bias_params: 27
-    bw_bias_params: 32
+    weight_scale: 48.847919
+    data_scale: 4.29569
+    int8_term: true
   }
 }
 layer {
@@ -436,14 +401,9 @@ layer {
     }
   }
   quantization_param {
-    bw_layer_in: 16
-    bw_layer_out: 16
-    bw_params: 16
-    fl_layer_in: 9
-    fl_layer_out: 11
-    fl_params: 14
-    fl_bias_params: 28
-    bw_bias_params: 32
+    weight_scale: 90.54303
+    data_scale: 2.7933271
+    int8_term: true
   }
 }
 layer {
@@ -470,14 +430,9 @@ layer {
     }
   }
   quantization_param {
-    bw_layer_in: 16
-    bw_layer_out: 16
-    bw_params: 16
-    fl_layer_in: 11
-    fl_layer_out: 10
-    fl_params: 14
-    fl_bias_params: 27
-    bw_bias_params: 32
+    weight_scale: 72.438339
+    data_scale: 14.221051
+    int8_term: true
   }
 }
 layer {
@@ -506,14 +461,9 @@ layer {
     }
   }
   quantization_param {
-    bw_layer_in: 16
-    bw_layer_out: 16
-    bw_params: 16
-    fl_layer_in: 10
-    fl_layer_out: 10
-    fl_params: 12
-    fl_bias_params: 27
-    bw_bias_params: 32
+    weight_scale: 21.321894
+    data_scale: 8.1309643
+    int8_term: true
   }
 }
 layer {
@@ -540,14 +490,9 @@ layer {
     }
   }
   quantization_param {
-    bw_layer_in: 16
-    bw_layer_out: 16
-    bw_params: 16
-    fl_layer_in: 10
-    fl_layer_out: 11
-    fl_params: 14
-    fl_bias_params: 28
-    bw_bias_params: 32
+    weight_scale: 117.76922
+    data_scale: 12.534636
+    int8_term: true
   }
 }
 layer {
@@ -577,14 +522,9 @@ layer {
     }
   }
   quantization_param {
-    bw_layer_in: 16
-    bw_layer_out: 16
-    bw_params: 16
-    fl_layer_in: 11
-    fl_layer_out: 10
-    fl_params: 13
-    fl_bias_params: 28
-    bw_bias_params: 32
+    weight_scale: 37.647362
+    data_scale: 8.095108
+    int8_term: true
   }
 }
 layer {
@@ -611,14 +551,9 @@ layer {
     }
   }
   quantization_param {
-    bw_layer_in: 16
-    bw_layer_out: 16
-    bw_params: 16
-    fl_layer_in: 10
-    fl_layer_out: 10
-    fl_params: 14
-    fl_bias_params: 27
-    bw_bias_params: 32
+    weight_scale: 119.58753
+    data_scale: 14.07267
+    int8_term: true
   }
 }
 layer {
@@ -647,14 +582,9 @@ layer {
     }
   }
   quantization_param {
-    bw_layer_in: 16
-    bw_layer_out: 16
-    bw_params: 16
-    fl_layer_in: 10
-    fl_layer_out: 11
-    fl_params: 12
-    fl_bias_params: 27
-    bw_bias_params: 32
+    weight_scale: 27.82765
+    data_scale: 9.7479086
+    int8_term: true
   }
 }
 layer {
@@ -681,14 +611,9 @@ layer {
     }
   }
   quantization_param {
-    bw_layer_in: 16
-    bw_layer_out: 16
-    bw_params: 16
-    fl_layer_in: 11
-    fl_layer_out: 11
-    fl_params: 15
-    fl_bias_params: 28
-    bw_bias_params: 32
+    weight_scale: 145.55121
+    data_scale: 13.46294
+    int8_term: true
   }
 }
 layer {
@@ -717,14 +642,9 @@ layer {
     }
   }
   quantization_param {
-    bw_layer_in: 16
-    bw_layer_out: 16
-    bw_params: 16
-    fl_layer_in: 11
-    fl_layer_out: 10
-    fl_params: 12
-    fl_bias_params: 27
-    bw_bias_params: 32
+    weight_scale: 25.307146
+    data_scale: 12.180066
+    int8_term: true
   }
 }
 layer {
@@ -751,14 +671,9 @@ layer {
     }
   }
   quantization_param {
-    bw_layer_in: 16
-    bw_layer_out: 16
-    bw_params: 16
-    fl_layer_in: 10
-    fl_layer_out: 11
-    fl_params: 14
-    fl_bias_params: 28
-    bw_bias_params: 32
+    weight_scale: 91.19944
+    data_scale: 12.369492
+    int8_term: true
   }
 }
 layer {
@@ -787,14 +702,9 @@ layer {
     }
   }
   quantization_param {
-    bw_layer_in: 16
-    bw_layer_out: 16
-    bw_params: 16
-    fl_layer_in: 11
-    fl_layer_out: 11
-    fl_params: 12
-    fl_bias_params: 27
-    bw_bias_params: 32
+    weight_scale: 30.591789
+    data_scale: 10.186733
+    int8_term: true
   }
 }
 layer {
@@ -821,14 +731,9 @@ layer {
     }
   }
   quantization_param {
-    bw_layer_in: 16
-    bw_layer_out: 16
-    bw_params: 16
-    fl_layer_in: 11
-    fl_layer_out: 10
-    fl_params: 14
-    fl_bias_params: 27
-    bw_bias_params: 32
+    weight_scale: 68.289795
+    data_scale: 16.145826
+    int8_term: true
   }
 }
 layer {
@@ -857,14 +762,9 @@ layer {
     }
   }
   quantization_param {
-    bw_layer_in: 16
-    bw_layer_out: 16
-    bw_params: 16
-    fl_layer_in: 10
-    fl_layer_out: 10
-    fl_params: 13
-    fl_bias_params: 27
-    bw_bias_params: 32
+    weight_scale: 32.426388
+    data_scale: 7.8591938
+    int8_term: true
   }
 }
 layer {
@@ -891,14 +791,9 @@ layer {
     }
   }
   quantization_param {
-    bw_layer_in: 16
-    bw_layer_out: 16
-    bw_params: 16
-    fl_layer_in: 10
-    fl_layer_out: 10
-    fl_params: 14
-    fl_bias_params: 27
-    bw_bias_params: 32
+    weight_scale: 83.742989
+    data_scale: 16.167366
+    int8_term: true
   }
 }
 layer {
@@ -927,14 +822,9 @@ layer {
     }
   }
   quantization_param {
-    bw_layer_in: 16
-    bw_layer_out: 16
-    bw_params: 16
-    fl_layer_in: 10
-    fl_layer_out: 9
-    fl_params: 12
-    fl_bias_params: 28
-    bw_bias_params: 32
+    weight_scale: 22.310503
+    data_scale: 10.612206
+    int8_term: true
   }
 }
 layer {
@@ -961,14 +851,9 @@ layer {
     }
   }
   quantization_param {
-    bw_layer_in: 16
-    bw_layer_out: 16
-    bw_params: 16
-    fl_layer_in: 9
-    fl_layer_out: 9
-    fl_params: 15
-    fl_bias_params: 27
-    bw_bias_params: 32
+    weight_scale: 140.12332
+    data_scale: 15.646962
+    int8_term: true
   }
 }
 layer {
@@ -998,14 +883,9 @@ layer {
     }
   }
   quantization_param {
-    bw_layer_in: 16
-    bw_layer_out: 16
-    bw_params: 16
-    fl_layer_in: 9
-    fl_layer_out: 9
-    fl_params: 10
-    fl_bias_params: 28
-    bw_bias_params: 32
+    weight_scale: 6.2146893
+    data_scale: 16.130241
+    int8_term: true
   }
 }
 layer {
@@ -1032,14 +912,9 @@ layer {
     }
   }
   quantization_param {
-    bw_layer_in: 16
-    bw_layer_out: 16
-    bw_params: 16
-    fl_layer_in: 9
-    fl_layer_out: 10
-    fl_params: 15
-    fl_bias_params: 27
-    bw_bias_params: 32
+    weight_scale: 133.90248
+    data_scale: 17.868656
+    int8_term: true
   }
 }
 layer {
@@ -1068,14 +943,9 @@ layer {
     }
   }
   quantization_param {
-    bw_layer_in: 16
-    bw_layer_out: 16
-    bw_params: 16
-    fl_layer_in: 10
-    fl_layer_out: 9
-    fl_params: 9
-    fl_bias_params: 25
-    bw_bias_params: 32
+    weight_scale: 2.696779
+    data_scale: 15.068991
+    int8_term: true
   }
 }
 layer {
@@ -1102,14 +972,9 @@ layer {
     }
   }
   quantization_param {
-    bw_layer_in: 16
-    bw_layer_out: 16
-    bw_params: 16
-    fl_layer_in: 9
-    fl_layer_out: 8
-    fl_params: 15
-    fl_bias_params: 26
-    bw_bias_params: 32
+    weight_scale: 139.46881
+    data_scale: 11.059224
+    int8_term: true
   }
 }
 layer {
@@ -1136,14 +1001,9 @@ layer {
     }
   }
   quantization_param {
-    bw_layer_in: 16
-    bw_layer_out: 16
-    bw_params: 16
-    fl_layer_in: 8
-    fl_layer_out: 9
-    fl_params: 15
-    fl_bias_params: 29
-    bw_bias_params: 32
+    weight_scale: 217.11464
+    data_scale: 4.3709879
+    int8_term: true
   }
 }
 layer {
@@ -1172,14 +1032,9 @@ layer {
     }
   }
   quantization_param {
-    bw_layer_in: 16
-    bw_layer_out: 16
-    bw_params: 16
-    fl_layer_in: 9
-    fl_layer_out: 10
-    fl_params: 15
-    fl_bias_params: 29
-    bw_bias_params: 32
+    weight_scale: 135.03635
+    data_scale: 22.114492
+    int8_term: true
   }
 }
 layer {
@@ -1206,14 +1061,9 @@ layer {
     }
   }
   quantization_param {
-    bw_layer_in: 16
-    bw_layer_out: 16
-    bw_params: 16
-    fl_layer_in: 10
-    fl_layer_out: 10
-    fl_params: 16
-    fl_bias_params: 30
-    bw_bias_params: 32
+    weight_scale: 363.39963
+    data_scale: 35.716877
+    int8_term: true
   }
 }
 layer {
@@ -1242,14 +1092,9 @@ layer {
     }
   }
   quantization_param {
-    bw_layer_in: 16
-    bw_layer_out: 16
-    bw_params: 16
-    fl_layer_in: 10
-    fl_layer_out: 10
-    fl_params: 15
-    fl_bias_params: 29
-    bw_bias_params: 32
+    weight_scale: 157.42844
+    data_scale: 47.902428
+    int8_term: true
   }
 }
 layer {
@@ -1276,14 +1121,9 @@ layer {
     }
   }
   quantization_param {
-    bw_layer_in: 16
-    bw_layer_out: 16
-    bw_params: 16
-    fl_layer_in: 10
-    fl_layer_out: 12
-    fl_params: 16
-    fl_bias_params: 29
-    bw_bias_params: 32
+    weight_scale: 283.46375
+    data_scale: 31.814707
+    int8_term: true
   }
 }
 layer {
@@ -1312,14 +1152,9 @@ layer {
     }
   }
   quantization_param {
-    bw_layer_in: 16
-    bw_layer_out: 16
-    bw_params: 16
-    fl_layer_in: 12
-    fl_layer_out: 11
-    fl_params: 15
-    fl_bias_params: 28
-    bw_bias_params: 32
+    weight_scale: 140.0883
+    data_scale: 57.767086
+    int8_term: true
   }
 }
 layer {
@@ -1346,14 +1181,9 @@ layer {
     }
   }
   quantization_param {
-    bw_layer_in: 16
-    bw_layer_out: 16
-    bw_params: 16
-    fl_layer_in: 11
-    fl_layer_out: 11
-    fl_params: 15
-    fl_bias_params: 30
-    bw_bias_params: 32
+    weight_scale: 181.29547
+    data_scale: 33.367165
+    int8_term: true
   }
 }
 layer {
@@ -1382,14 +1212,9 @@ layer {
     }
   }
   quantization_param {
-    bw_layer_in: 16
-    bw_layer_out: 16
-    bw_params: 16
-    fl_layer_in: 11
-    fl_layer_out: 12
-    fl_params: 14
-    fl_bias_params: 29
-    bw_bias_params: 32
+    weight_scale: 98.492592
+    data_scale: 41.082752
+    int8_term: true
   }
 }
 layer {
@@ -1424,14 +1249,9 @@ layer {
     }
   }
   quantization_param {
-    bw_layer_in: 16
-    bw_layer_out: 16
-    bw_params: 16
-    fl_layer_in: 9
-    fl_layer_out: 10
-    fl_params: 14
-    fl_bias_params: 30
-    bw_bias_params: 32
+    weight_scale: 78.355545
+    data_scale: 16.130241
+    int8_term: true
   }
 }
 layer {
@@ -1481,14 +1301,9 @@ layer {
     }
   }
   quantization_param {
-    bw_layer_in: 16
-    bw_layer_out: 16
-    bw_params: 16
-    fl_layer_in: 9
-    fl_layer_out: 5
-    fl_params: 12
-    fl_bias_params: 29
-    bw_bias_params: 32
+    weight_scale: 23.840445
+    data_scale: 16.130241
+    int8_term: true
   }
 }
 layer {
@@ -1556,14 +1371,9 @@ layer {
     }
   }
   quantization_param {
-    bw_layer_in: 16
-    bw_layer_out: 16
-    bw_params: 16
-    fl_layer_in: 8
-    fl_layer_out: 9
-    fl_params: 15
-    fl_bias_params: 30
-    bw_bias_params: 32
+    weight_scale: 137.15521
+    data_scale: 4.3709879
+    int8_term: true
   }
 }
 layer {
@@ -1613,14 +1423,9 @@ layer {
     }
   }
   quantization_param {
-    bw_layer_in: 16
-    bw_layer_out: 16
-    bw_params: 16
-    fl_layer_in: 8
-    fl_layer_out: 5
-    fl_params: 12
-    fl_bias_params: 29
-    bw_bias_params: 32
+    weight_scale: 20.872328
+    data_scale: 4.3709879
+    int8_term: true
   }
 }
 layer {
@@ -1690,14 +1495,9 @@ layer {
     }
   }
   quantization_param {
-    bw_layer_in: 16
-    bw_layer_out: 16
-    bw_params: 16
-    fl_layer_in: 10
-    fl_layer_out: 11
-    fl_params: 15
-    fl_bias_params: 30
-    bw_bias_params: 32
+    weight_scale: 148.255
+    data_scale: 35.716877
+    int8_term: true
   }
 }
 layer {
@@ -1747,14 +1547,9 @@ layer {
     }
   }
   quantization_param {
-    bw_layer_in: 16
-    bw_layer_out: 16
-    bw_params: 16
-    fl_layer_in: 10
-    fl_layer_out: 6
-    fl_params: 12
-    fl_bias_params: 29
-    bw_bias_params: 32
+    weight_scale: 21.079115
+    data_scale: 35.716877
+    int8_term: true
   }
 }
 layer {
@@ -1824,14 +1619,9 @@ layer {
     }
   }
   quantization_param {
-    bw_layer_in: 16
-    bw_layer_out: 16
-    bw_params: 16
-    fl_layer_in: 10
-    fl_layer_out: 12
-    fl_params: 15
-    fl_bias_params: 30
-    bw_bias_params: 32
+    weight_scale: 156.43449
+    data_scale: 31.814707
+    int8_term: true
   }
 }
 layer {
@@ -1881,14 +1671,9 @@ layer {
     }
   }
   quantization_param {
-    bw_layer_in: 16
-    bw_layer_out: 16
-    bw_params: 16
-    fl_layer_in: 10
-    fl_layer_out: 6
-    fl_params: 12
-    fl_bias_params: 30
-    bw_bias_params: 32
+    weight_scale: 22.898235
+    data_scale: 31.814707
+    int8_term: true
   }
 }
 layer {
@@ -1958,14 +1743,9 @@ layer {
     }
   }
   quantization_param {
-    bw_layer_in: 16
-    bw_layer_out: 16
-    bw_params: 16
-    fl_layer_in: 11
-    fl_layer_out: 13
-    fl_params: 15
-    fl_bias_params: 30
-    bw_bias_params: 32
+    weight_scale: 163.66455
+    data_scale: 33.367165
+    int8_term: true
   }
 }
 layer {
@@ -2015,14 +1795,9 @@ layer {
     }
   }
   quantization_param {
-    bw_layer_in: 16
-    bw_layer_out: 16
-    bw_params: 16
-    fl_layer_in: 11
-    fl_layer_out: 5
-    fl_params: 12
-    fl_bias_params: 29
-    bw_bias_params: 32
+    weight_scale: 28.246943
+    data_scale: 33.367165
+    int8_term: true
   }
 }
 layer {
@@ -2092,14 +1867,9 @@ layer {
     }
   }
   quantization_param {
-    bw_layer_in: 16
-    bw_layer_out: 16
-    bw_params: 16
-    fl_layer_in: 12
-    fl_layer_out: 12
-    fl_params: 16
-    fl_bias_params: 30
-    bw_bias_params: 32
+    weight_scale: 262.46109
+    data_scale: 19.772627
+    int8_term: true
   }
 }
 layer {
@@ -2149,14 +1919,9 @@ layer {
     }
   }
   quantization_param {
-    bw_layer_in: 16
-    bw_layer_out: 16
-    bw_params: 16
-    fl_layer_in: 12
-    fl_layer_out: 6
-    fl_params: 13
-    fl_bias_params: 27
-    bw_bias_params: 32
+    weight_scale: 41.066422
+    data_scale: 19.772627
+    int8_term: true
   }
 }
 layer {

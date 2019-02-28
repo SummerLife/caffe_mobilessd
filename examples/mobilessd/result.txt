@@ -208,3 +208,7 @@ Dynamic fixed point net:
 mAP: 0.322727
 
 
+Baseline 32bit float: 0.736846
+mAP: 0.620216
+
+
