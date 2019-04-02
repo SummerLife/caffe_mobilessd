@@ -1,4 +1,5 @@
 #include <vector>
+#include <iomanip>
 
 #include "ristretto/base_ristretto_layer.hpp"
 #include "caffe/filler.hpp"
@@ -23,8 +24,9 @@ ConvolutionRistrettoLayer<Dtype>::ConvolutionRistrettoLayer(
     this->fl_layer_out_ = this->layer_param_.quantization_param().fl_layer_out();
     this->fl_params_ = this->layer_param_.quantization_param().fl_params();
     this->fl_bias_params_ = this->layer_param_.quantization_param().fl_bias_params();
-
-    this->weight_scale_ = this->layer_param_.quantization_param().weight_scale();
+    for(unsigned int i = 0; i < this->layer_param_.quantization_param().weight_scale_size(); i++){
+    	this->weight_scale_.push_back(this->layer_param_.quantization_param().weight_scale(i));
+    }
     this->data_scale_ = this->layer_param_.quantization_param().data_scale();
     this->int8_term_ = this->layer_param_.quantization_param().int8_term();
     break;
@@ -253,6 +255,11 @@ void ConvolutionRistrettoLayer<Dtype>::Forward_cpu(
 	            bottom[i]->count());*/
 
 	  }
+/*
+	  if(this->weight_offset_ == this->blobs_[0]->count()/this->weight_scale_.size())
+		  std::cout << "same" << std::endl;
+	  else
+		  std::cout << "not same" << std::endl;*/
 
 	  caffe_copy(this->blobs_[0]->count(), this->blobs_[0]->cpu_data(),
 	       this->weights_quantized_[0]->mutable_cpu_data());
@@ -286,7 +293,7 @@ void ConvolutionRistrettoLayer<Dtype>::Forward_cpu(
 //		   for(int i = 0; i < top.size(); ++i)
 //		   {
 //			   Dtype* top_data = top[i]->mutable_cpu_data();
-			   this->QuantizeLayerOutputs_cpu(top_data,top[i]->count());
+//			   this->QuantizeLayerOutputs_cpu(top_data,top[i]->count());
 //		   }
 
 		   for (int n = 0; n < this->num_; ++n)
@@ -308,9 +315,13 @@ void ConvolutionRistrettoLayer<Dtype>::Forward_cpu(
 
 		        this->QuantizeLayerInputs_cpu(this->weights_quantized_[i+2]->mutable_cpu_data(),
 		            bottom[i]->count());// because this bottom can also be others input.
-
 		  }
 	  }
+
+	  char name[100];
+	  sprintf(name,"%s","input");
+
+
 	  // Trim weights
 	  caffe_copy(this->blobs_[0]->count(), this->blobs_[0]->cpu_data(),
 		  this->weights_quantized_[0]->mutable_cpu_data());
@@ -318,16 +329,18 @@ void ConvolutionRistrettoLayer<Dtype>::Forward_cpu(
 		caffe_copy(this->blobs_[1]->count(), this->blobs_[1]->cpu_data(),
 			this->weights_quantized_[1]->mutable_cpu_data());
 	  }
-	  int rounding = this->phase_ == TEST ? this->rounding_ :
-		  QuantizationParameter_Rounding_STOCHASTIC;
 /*
+	  int rounding = this->phase_ == TEST ? this->rounding_ :
+		  QuantizationParameter_Rounding_STOCHASTIC;*/
+	  int rounding = QuantizationParameter_Rounding_NEAREST;
+
 	  string layer_name = this->layer_param_.name();
 	  string::size_type Pos = 0;
 	  while( (Pos = layer_name.find('/',Pos)) != string::npos){
 		layer_name.replace(Pos,1,"_");
 	  }
 
-	  //char * layer_name = "1";
+	  /*	  //char * layer_name = "1";
 	  char str[][20] ={"_weight_uq_","_weight_q_","_",".dat"};
 	  char name[100];
 	  sprintf(name,"%s%s%d%s",layer_name.data(),str[0],this->fl_params_,str[3]);
@@ -335,18 +348,20 @@ void ConvolutionRistrettoLayer<Dtype>::Forward_cpu(
 					,this->weights_quantized_[0]->count(),name);*/
 
 	  this->QuantizeWeights_cpu(this->weights_quantized_, rounding,this->bias_term_);
+
 /*
 	  sprintf(name,"%s%s%d%s",layer_name.data(),str[1],this->fl_params_,str[3]);
 	  this->op_data(this->weights_quantized_[0]->cpu_data()
 					,this->weights_quantized_[0]->count(),name);
-*/
 
 	  char name[100];
+	  sprintf(name,"%s","int16_no_bn.caffemodel");
 	  sprintf(name,"%s","int16_no_bn.caffemodel");
 	  this->op_int_weight(this->weights_quantized_[0]->cpu_data()
 				,this->weights_quantized_[0]->count(),name);
 	  this->op_int_weight(this->weights_quantized_[1]->cpu_data()
 	  				,this->weights_quantized_[1]->count(),name);
+*/
 
 	  // Do forward propagation
 	  const Dtype* weight = this->weights_quantized_[0]->cpu_data();
@@ -364,11 +379,17 @@ void ConvolutionRistrettoLayer<Dtype>::Forward_cpu(
 			this->forward_cpu_bias(top_data + n * this->top_dim_, bias);
 		  }
 		}
+
 		if (this->phase_ == TEST)
 		{
+			/*
+			if(layer_name == "conv0")
+				std::cout << std::setprecision(10) <<  top_data[0] << std::endl;*/
 			this->QuantizeLayerOutputs_cpu(top_data, top[i]->count());
+			/*
+			if(layer_name == "conv0")
+				std::cout << std::setprecision(10) <<  top_data[0] << std::endl;*/
 		}
-
 	  }
   }
 }

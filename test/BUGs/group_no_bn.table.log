@@ -1,0 +1,94 @@
+conv0: value range 0 - 2.56802, interval 0.001253916067071259, interval num 2048
+[ 757  633  868 ...   49  119 3987]
+conv1/dw: value range 0 - 43.888977, interval 0.021430164575576782, interval num 2048
+[2326515    4984    5134 ...       0       0       1]
+conv1: value range 0 - 58.075787, interval 0.02835731767117977, interval num 2048
+[2240134    6279    6290 ...       0       0       1]
+conv2/dw: value range 0 - 244.08331, interval 0.1191813051700592, interval num 2048
+[3548676  199988  177759 ...       0       0       1]
+conv2: value range 0 - 42.86438, interval 0.02092987298965454, interval num 2048
+[770745  14115  13695 ...      0      0      1]
+conv3/dw: value range 0 - 113.073364, interval 0.05521160364151001, interval num 2048
+[1150994   27061   27684 ...       0       0       1]
+conv3: value range 0 - 51.974037, interval 0.025377947837114334, interval num 2048
+[1783631   27676   25438 ...       0       0       1]
+conv4/dw: value range 0 - 93.47984, interval 0.045644454658031464, interval num 2048
+[2520045   39516   39513 ...       0       0       1]
+conv4: value range 0 - 18.10506, interval 0.00884036161005497, interval num 2048
+[226624   1871   1873 ...      0      0      1]
+conv5/dw: value range 0 - 23.131363, interval 0.011294610798358917, interval num 2048
+[452197   3407   3540 ...      0      0      1]
+conv5: value range 0 - 16.744362, interval 0.008175957947969437, interval num 2048
+[1207310    8835    5712 ...       0       0       1]
+conv6/dw: value range 0 - 16.611324, interval 0.008110998198390007, interval num 2048
+[1361194    3247    3137 ...       0       0       1]
+conv6: value range 0 - 15.571255, interval 0.007603151723742485, interval num 2048
+[191783   4101   3702 ...      0      0      1]
+conv7/dw: value range 0 - 15.598461, interval 0.0076164361089468, interval num 2048
+[285756   1703   1771 ...      0      0      1]
+conv7: value range 0 - 14.463867, interval 0.007062435150146484, interval num 2048
+[672859   2269   2324 ...      0      0      1]
+conv8/dw: value range 0 - 14.941752, interval 0.007295777555555105, interval num 2048
+[562525   1996   2012 ...      0      0      1]
+conv8: value range 0 - 16.432539, interval 0.008023700676858425, interval num 2048
+[614881   2294   2377 ...      0      0      1]
+conv9/dw: value range 0 - 13.09996, interval 0.006396465003490448, interval num 2048
+[627625   1914   1932 ...      0      0      1]
+conv9: value range 0 - 11.691816, interval 0.005708894692361355, interval num 2048
+[641786   1703   1621 ...      0      0      1]
+conv10/dw: value range 0 - 20.949055, interval 0.01022903062403202, interval num 2048
+[565845   2997   2962 ...      0      0      1]
+conv10: value range 0 - 19.376438, interval 0.00946115143597126, interval num 2048
+[564487   4379   5543 ...      0      0      1]
+conv11/dw: value range 0 - 11.335816, interval 0.005535066593438387, interval num 2048
+[720883   1737   1856 ...      1      0      1]
+conv11: value range 0 - 13.476379, interval 0.006580263376235962, interval num 2048
+[501345   4111   1886 ...      0      0      1]
+conv12/dw: value range 0 - 9.223394, interval 0.004503610543906689, interval num 2048
+[837726   3034   2906 ...      0      0      1]
+conv12: value range 0 - 14.536967, interval 0.00709812855347991, interval num 2048
+[68416  1843  2868 ...     0     0     1]
+conv13/dw: value range 0 - 8.583556, interval 0.004191189538687468, interval num 2048
+[440478    502    489 ...      0      0      1]
+conv13: value range 0 - 23.177391, interval 0.011317085474729538, interval num 2048
+[263877   4744   7471 ...      0      0      1]
+conv14_1: value range 0 - 34.172863, interval 0.0166859682649374, interval num 2048
+[671617    921    930 ...      0      0      1]
+conv14_2: value range 0 - 6.7864094, interval 0.003313676454126835, interval num 2048
+[131807    533    505 ...      0      0      1]
+conv15_1: value range 0 - 4.2798767, interval 0.002089783549308777, interval num 2048
+[59266   146   157 ...     0     0     1]
+conv15_2: value range 0 - 5.674481, interval 0.0027707426343113184, interval num 2048
+[14256    56    61 ...     0     0     1]
+conv16_1: value range 0 - 6.004232, interval 0.002931753871962428, interval num 2048
+[7333   33   31 ...    0    0    1]
+conv16_2: value range 0 - 3.5077157, interval 0.0017127518076449633, interval num 2048
+[4452   16    8 ...    0    0    1]
+conv17_1: value range 0 - 4.5160193, interval 0.0022050875704735518, interval num 2048
+[3618   17   10 ...    0    0    1]
+conv17_2: value range 0 - 3.5080888, interval 0.0017129339976236224, interval num 2048
+[634   2   4 ...   0   0   1]
+conv11_mbox_loc: value range 0 - 9.223394, interval 0.004503610543906689, interval num 2048
+[837726   3034   2906 ...      0      0      1]
+conv11_mbox_conf: value range 0 - 9.223394, interval 0.004503610543906689, interval num 2048
+[837726   3034   2906 ...      0      0      1]
+conv13_mbox_loc: value range 0 - 34.172863, interval 0.0166859682649374, interval num 2048
+[671617    921    930 ...      0      0      1]
+conv13_mbox_conf: value range 0 - 34.172863, interval 0.0166859682649374, interval num 2048
+[671617    921    930 ...      0      0      1]
+conv14_2_mbox_loc: value range 0 - 4.2798767, interval 0.002089783549308777, interval num 2048
+[59266   146   157 ...     0     0     1]
+conv14_2_mbox_conf: value range 0 - 4.2798767, interval 0.002089783549308777, interval num 2048
+[59266   146   157 ...     0     0     1]
+conv15_2_mbox_loc: value range 0 - 6.004232, interval 0.002931753871962428, interval num 2048
+[7333   33   31 ...    0    0    1]
+conv15_2_mbox_conf: value range 0 - 6.004232, interval 0.002931753871962428, interval num 2048
+[7333   33   31 ...    0    0    1]
+conv16_2_mbox_loc: value range 0 - 4.5160193, interval 0.0022050875704735518, interval num 2048
+[3618   17   10 ...    0    0    1]
+conv16_2_mbox_conf: value range 0 - 4.5160193, interval 0.0022050875704735518, interval num 2048
+[3618   17   10 ...    0    0    1]
+conv17_2_mbox_loc: value range 0 - 6.0884137, interval 0.0029728582594543695, interval num 2048
+[365   0   2 ...   0   0   1]
+conv17_2_mbox_conf: value range 0 - 6.0884137, interval 0.0029728582594543695, interval num 2048
+[365   0   2 ...   0   0   1]

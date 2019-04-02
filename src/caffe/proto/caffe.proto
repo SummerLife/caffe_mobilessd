@@ -573,7 +573,8 @@ message QuantizationParameter{
   // Integer-power-of-two weights
   optional int32 exp_min = 11 [default = -8];
   optional int32 exp_max = 12 [default = -1];
-  optional float weight_scale = 22 [default = 1];
+//  optional float weight_scale = 22 [default = -1];
+  repeated float weight_scale = 22;
   optional float data_scale = 23 [default = 1];
   optional bool int8_term = 24 [default = false];
 }

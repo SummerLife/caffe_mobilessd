@@ -429,37 +429,16 @@ void Net<Dtype>::RangeInLayers(vector<string>* layer_name,
 //      max_val = findMax(&(*layers_[layer_id]->blobs()[0]));
 		max_val = findMax (d->blobs()[0].get());
 		max_param->at(index) = std::max(max_param->at(index), max_val);
-/*
-		string layer_name_xyx = layer_name->at(index);
-		string::size_type Pos = 0;
-		while( (Pos = layer_name_xyx.find('/',Pos)) != string::npos){
-		layer_name_xyx.replace(Pos,1,"_");
-		}
-		//char * layer_name = "1";
-		char str[][20] ={"_weight_","_weight_q_","_",".dat"};
-		char name[100];
-		char x[100];
-		//		Blob<Dtype>* blob = &(*layers_[layer_id]->blobs()[0]);
-		sprintf(name,"%s%s%f%s",layer_name_xyx.data(),str[0],max_val,str[3]);
+
 		
-		sprintf(x,"%s%s","/home/sun/caffe_mobile/test_data/",name);
-		std::ofstream f(x,ios::binary);
-		if(!f){
-				LOG(INFO) <<"failed to create the file"<< "\n";
+		bool state = d->return_bias_term_();
+		if(state){
+		max_val = findMax(&(*layers_[layer_id]->blobs()[1]));
+		max_bias->at(index) = std::max(max_bias->at(index), max_val);
 		}
-		else
-		{
-				f.write((char*)d->blobs()[0].get(),d->blobs()[0].get()->count ()*sizeof(Dtype));
-				f.close();
-		}
-*/
-				
-		
-	  bool state = d->return_bias_term_();
-	  if(state){
- 	    max_val = findMax(&(*layers_[layer_id]->blobs()[1]));
- 	    max_bias->at(index) = std::max(max_bias->at(index), max_val);
-	  }
+//		if(max_param->at(index) < max_bias->at(index) )
+//			max_param->at(index) = max_bias->at(index);
+
       index++;
     }
   }

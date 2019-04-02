@@ -80,7 +80,8 @@ class BaseRistrettoLayer{
   // For parameter layers: reduced word with parameters.
   vector<shared_ptr<Blob<Dtype> > > weights_quantized_;
   //xyx add for int8
-  float weight_scale_, data_scale_;
+  vector<float> weight_scale_;
+  float data_scale_;
   bool int8_term_;
 };
 
@@ -94,6 +95,7 @@ class ConvolutionRistrettoLayer : public ConvolutionLayer<Dtype>,
   explicit ConvolutionRistrettoLayer(const LayerParameter& param);
   virtual inline const char* type() const { return "ConvolutionRistretto"; }
   void op_int_weight(const Dtype* data,const int cnt,char* name);
+
  protected:
   void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
       const vector<Blob<Dtype>*>& top);

@@ -212,3 +212,280 @@ Baseline 32bit float: 0.736846
 mAP: 0.620216
 
 
+Baseline 32bit float: 0.736846
+mAP: 0
+
+
+Baseline 32bit float: 2.17713e-38
+mAP: 0
+
+
+Baseline 32bit float: 6.69501e-38
+mAP: 0
+
+
+Baseline 32bit float: 0.736846
+mAP: 0
+
+int8
+Baseline 32bit float: 0.736846
+mAP: 0.620216
+
+
+int8
+Baseline 32bit float: 0.736846
+mAP: 0.620584
+
+
+int8
+Baseline 32bit float: 0.736846
+mAP: 0.620584
+
+
+int8
+Baseline 32bit float: 0.736846
+mAP: 0.731183
+
+
+int8
+Baseline 32bit float: 0.736846
+mAP: 0.620584
+
+
+int8
+Baseline 32bit float: 0.322727
+mAP: 0
+
+
+int8
+Baseline 32bit float: 0.736846
+mAP: 0.620584
+
+
+int8
+Baseline 32bit float: 0.322727
+mAP: 0.25
+
+
+int8
+Baseline 32bit float: 0.736846
+mAP: 0.65611
+
+
+int8
+Baseline 32bit float: 0.736846
+mAP: 0.65611
+
+
+int8_5000
+Baseline 32bit float: 0.668219
+mAP: 0.604023
+
+
+int8_8
+Baseline 32bit float: 0.322727
+mAP: 0.25
+
+
+int8_40
+Baseline 32bit float: 0.736846
+mAP: 0.620584
+
+
+int8_group8
+Baseline 32bit float: 0.322727
+mAP: 0.25
+
+
+int8_group_40
+Baseline 32bit float: 0.736846
+mAP: 0.650225
+
+
+int8_group_40
+Baseline 32bit float: 0.736846
+mAP: 0.650225
+
+
+int8_group_40
+Baseline 32bit float: 0.736846
+mAP: 0.650225
+
+
+Baseline 32bit float: 0.322727
+Dynamic fixed point net:1
+16bit CONV weights,
+16bit FC weights,
+16bit layer activations:
+mAP: 0.322727
+
+
+Baseline 32bit float: 0.322727
+Dynamic fixed point net:1
+16bit CONV weights,
+16bit FC weights,
+16bit layer activations:
+mAP: 1.4013e-45
+
+
+Baseline 32bit float: 0.322727
+Dynamic fixed point net:1
+16bit CONV weights,
+16bit FC weights,
+16bit layer activations:
+mAP: 1.4013e-45
+
+
+Baseline 32bit float: 0.322727
+Dynamic fixed point net:1
+16bit CONV weights,
+16bit FC weights,
+16bit layer activations:
+mAP: 0.322727
+
+
+Baseline 32bit float: 0.322727
+Dynamic fixed point net:1
+16bit CONV weights,
+16bit FC weights,
+16bit layer activations:
+mAP: 1.4013e-45
+
+
+Baseline 32bit float: 0.322727
+Dynamic fixed point net:1
+16bit CONV weights,
+16bit FC weights,
+16bit layer activations:
+mAP: 0.322727
+
+
+Baseline 32bit float: 0.322727
+Dynamic fixed point net:1
+16bit CONV weights,
+16bit FC weights,
+16bit layer activations:
+mAP: 1.4013e-45
+
+
+Baseline 32bit float: 0.322727
+Dynamic fixed point net:1
+16bit CONV weights,
+16bit FC weights,
+16bit layer activations:
+mAP: 0.322727
+
+
+Baseline 32bit float: 0.322727
+Dynamic fixed point net:1
+16bit CONV weights,
+16bit FC weights,
+16bit layer activations:
+mAP: 0.227273
+
+
+Baseline 32bit float: 0.322727
+Dynamic fixed point net:1
+16bit CONV weights,
+16bit FC weights,
+16bit layer activations:
+mAP: 0.212121
+
+
+Baseline 32bit float: 0.322727
+Dynamic fixed point net:1
+16bit CONV weights,
+16bit FC weights,
+16bit layer activations:
+mAP: 0.322727
+
+
+Baseline 32bit float: 0.322727
+Dynamic fixed point net:1
+16bit CONV weights,
+16bit FC weights,
+16bit layer activations:
+mAP: 0.322727
+
+
+Baseline 32bit float: 0.322727
+Dynamic fixed point net:1
+16bit CONV weights,
+16bit FC weights,
+16bit layer activations:
+mAP: 0.322727
+
+
+Baseline 32bit float: 0.322727
+Dynamic fixed point net:1
+16bit CONV weights,
+16bit FC weights,
+16bit layer activations:
+mAP: 0.322727
+
+
+int8_group_40
+Baseline 32bit float: 0.736846
+mAP: 0.661047
+
+
+int8_group_8
+Baseline 32bit float: 0.322727
+mAP: 0.240909
+
+
+int8_group_5000
+Baseline 32bit float: 0.668219
+mAP: 0.563079
+
+
+int8_group_40
+Baseline 32bit float: 0.736846
+mAP: 0.661047
+
+
+int8_group_8
+Baseline 32bit float: 0.322727
+mAP: 0.240909
+
+
+int8_group_8
+Baseline 32bit float: 0.322727
+mAP: 0.240909
+
+
+int8_group_5000
+Baseline 32bit float: 0.668219
+mAP: 0.604399
+
+
+int8_group_40
+Baseline 32bit float: 0.736846
+mAP: 0.661047
+
+
+int8_8
+Baseline 32bit float: 0.322727
+mAP: 0.240909
+
+
+int8_40
+Baseline 32bit float: 0.736846
+mAP: 0.698182
+
+
+int8_group_40
+Baseline 32bit float: 0.736846
+mAP: 0.716777
+
+
+int8_group_40
+Baseline 32bit float: 0.736846
+mAP: 0.716777
+
+
+int8_group_5000
+Baseline 32bit float: 0.668219
+mAP: 0.653749
+
+

@@ -21,6 +21,8 @@ void BaseRistrettoLayer<Dtype>::QuantizeWeights_cpu(
       const bool bias_term) {
   Dtype* weight = weights_quantized[0]->mutable_cpu_data();
   const int cnt_weight = weights_quantized[0]->count();
+
+
   switch (precision_) {
   case QuantizationParameter_Precision_MINIFLOAT:
     Trim2MiniFloat_cpu(weight, cnt_weight, fp_mant_, fp_exp_, rounding);
@@ -32,13 +34,29 @@ void BaseRistrettoLayer<Dtype>::QuantizeWeights_cpu(
   case QuantizationParameter_Precision_DYNAMIC_FIXED_POINT:
   	if(int8_term_)
   	{
-  		Trim2int8_data_cpu(weight, cnt_weight, weight_scale_);
+  		const int cnt = cnt_weight/weight_scale_.size();
+  		for(int i = 0; i < weight_scale_.size(); i++){
+  			Trim2int8_data_cpu((weight + i * cnt), cnt , weight_scale_[i]);
+  		}
   	}
   	else{
 		Trim2FixedPoint_cpu(weight, cnt_weight, bw_params_, rounding, fl_params_);
 		if (bias_term) {
-		  Trim2FixedPoint_cpu(weights_quantized[1]->mutable_cpu_data(),
-			  weights_quantized[1]->count(), bw_bias_params_, rounding, fl_params_+fl_layer_in_);
+//		  Trim2FixedPoint_cpu(weights_quantized[1]->mutable_cpu_data(),
+//			  weights_quantized[1]->count(), bw_bias_params_, rounding, fl_params_+fl_layer_in_);
+			Trim2FixedPoint_cpu(weights_quantized[1]->mutable_cpu_data(),
+					weights_quantized[1]->count(), bw_bias_params_, rounding, fl_bias_params_);
+
+			Dtype* bias = weights_quantized[1]->mutable_cpu_data();
+
+			for(int i = 0; i < weights_quantized[1]->count(); i++)
+			{
+//				bias[i] /= pow(2, -fl_params_);
+//				bias[i] = round(bias[i]);
+
+				bias[i] *= pow(2, (fl_params_+fl_layer_in_-fl_bias_params_));
+			}
+
 		}
   	}
     break;
@@ -86,7 +104,9 @@ void BaseRistrettoLayer<Dtype>::QuantizeLayerOutputs_cpu(
     case QuantizationParameter_Precision_DYNAMIC_FIXED_POINT:
     	if(int8_term_)
     	{
-    		Trim2int8_output_cpu(data, count, weight_scale_, data_scale_);
+    		for(int i = 0; i < weight_scale_.size(); i++ ){
+    		Trim2int8_output_cpu(data, count, weight_scale_[i], data_scale_);
+    		}
     	}
     	else
     	{
@@ -126,9 +146,7 @@ void BaseRistrettoLayer<Dtype>::Trim2FixedPoint_cpu(Dtype* data, const int cnt,
 		  break;
 		}
 		//data[index] *= pow(2, -fl);
-
 	}
-
 }
 
 typedef union {
@@ -241,7 +259,8 @@ void BaseRistrettoLayer<Dtype>::Trim2int8_data_cpu(Dtype* data, const int cnt,
 		data[index] = round(data[index]*scale_);
 		data[index] = std::max(std::min(data[index], max_data), min_data);
 
-//		data[index] = data[index]*scale_;
+		if(scale_ != 0)
+			data[index] = data[index]/scale_;
 	}
 }
 
@@ -261,7 +280,7 @@ void BaseRistrettoLayer<Dtype>::reQuantize_cpu(Dtype* data, const int count,cons
 	for(int index = 0; index < count; ++index)
 	{
 
-		data[index] *= pow(2, -fl);
+		data[index] /= pow(2, fl);
 	}
 }
 

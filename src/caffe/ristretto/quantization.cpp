@@ -303,122 +303,125 @@ void Quantization::RunForwardBatches(const int iterations,
 }
 
 void Quantization::Quantize2DynamicFixedPoint() {
-  // Find the integer length for dynamic fixed point numbers.
-  // The integer length is chosen such that no saturation occurs.
-  // This approximation assumes an infinitely long factional part.
-  // For layer activations, we reduce the integer length by one bit.
+	// Find the integer length for dynamic fixed point numbers.
+	// The integer length is chosen such that no saturation occurs.
+	// This approximation assumes an infinitely long factional part.
+	// For layer activations, we reduce the integer length by one bit.
 
-	  for (int i = 0; i < layer_names_.size(); ++i) {
-		il_in_.push_back((int)ceil(log2(max_in_[i]))+1);
-		il_out_.push_back((int)ceil(log2(max_out_[i]))+1);
-		il_params_.push_back((int)ceil(log2(max_params_[i]))+1);
-		il_bias_.push_back((int)ceil(log2(max_bias_[i]))+1);
-	  }
-  // Debug
-  for (int k = 0; k < layer_names_.size(); ++k) {
+	for (int i = 0; i < layer_names_.size(); ++i) {
+	il_in_.push_back((int)ceil(log2(max_in_[i]))+1);
+	il_out_.push_back((int)ceil(log2(max_out_[i]))+1);
+	il_params_.push_back((int)ceil(log2(max_params_[i]))+1);
+	il_bias_.push_back((int)ceil(log2(max_bias_[i]))+1);
+	}
+	// Debug
+	for (int k = 0; k < layer_names_.size(); ++k) {
 	LOG(INFO) << "Layer " << layer_names_[k] <<
-		", integer length input=" << il_in_[k] <<
-		", integer length output=" << il_out_[k] <<
-		", integer length parameters=" << il_params_[k]<<
-		", integer length bias=" << il_bias_[k];
-  }
+	", integer length input=" << il_in_[k] <<
+	", integer length output=" << il_out_[k] <<
+	", integer length parameters=" << il_params_[k]<<
+	", integer length bias=" << il_bias_[k];
+	}
 
 
-  	  int bw = 16;
-	  bw_conv_params_ = bw;
-	  bw_fc_params_ = bw;
-	  bw_out_ = bw;
-	  bw_in_ = bw;
-	  bw_bias_ = 32;
+	int bw = 16;
+	bw_conv_params_ = bw;
+	bw_fc_params_ = bw;
+	bw_out_ = bw;
+	bw_in_ = bw;
+	bw_bias_ = bw;
 
-	  NetParameter param;
-	  float accuracy;
-	  Net<float>* net_test;
+	NetParameter param;
+	float accuracy;
+	Net<float>* net_test;
 
-	  // Score dynamic fixed point network.
-	  // This network combines dynamic fixed point parameters in convolutional and
-	  // inner product layers, as well as dynamic fixed point activations.
-	  caffe::ReadNetParamsFromTextFileOrDie(model_, &param);
+	// Score dynamic fixed point network.
+	// This network combines dynamic fixed point parameters in convolutional and
+	// inner product layers, as well as dynamic fixed point activations.
+	caffe::ReadNetParamsFromTextFileOrDie(model_, &param);
 
-	  param.mutable_state()->set_phase(caffe::TEST);
+	param.mutable_state()->set_phase(caffe::TEST);
 
-	  EditNetDescriptionDynamicFixedPoint(&param, "Convolution_and_InnerProduct",
-		  "Parameters_and_Activations", bw_conv_params_, bw_fc_params_, bw_in_,
-		  bw_out_, bw_bias_);
+	EditNetDescriptionDynamicFixedPoint(&param, "Convolution_and_InnerProduct",
+	  "Parameters_and_Activations", bw_conv_params_, bw_fc_params_, bw_in_,
+	  bw_out_, bw_bias_);
 
-	  net_test = new Net<float>(param);
-	  net_test->CopyTrainedLayersFrom(weights_);
-	  RunForwardBatches(iterations_, net_test, &accuracy);
-	  delete net_test;
-	  param.release_state();
+	net_test = new Net<float>(param);
+	net_test->CopyTrainedLayersFrom(weights_);
+	RunForwardBatches(iterations_, net_test, &accuracy);
+	delete net_test;
+	param.release_state();
 
-	  WriteProtoToTextFile(param, model_quantized_);
+	WriteProtoToTextFile(param, model_quantized_);
 
-	  LOG(INFO) << "Baseline 32bit float: " << test_score_baseline_;
-	  LOG(INFO) << "Dynamic fixed point net:";
-	  LOG(INFO) << bw_conv_params_ << "bit CONV weights,";
-	  LOG(INFO) << bw_fc_params_ << "bit FC weights,";
-	  LOG(INFO) << bw_out_ << "bit layer activations:";
-	  LOG(INFO) << "mAP: " << accuracy;
-	  LOG(INFO) << "Please fine-tune.";
+	LOG(INFO) << "Baseline 32bit float: " << test_score_baseline_;
+	LOG(INFO) << "Dynamic fixed point net:";
+	LOG(INFO) << bw_conv_params_ << "bit CONV weights,";
+	LOG(INFO) << bw_fc_params_ << "bit FC weights,";
+	LOG(INFO) << bw_out_ << "bit layer activations:";
+	LOG(INFO) << "mAP: " << accuracy;
+	LOG(INFO) << "Please fine-tune.";
 
 
-	  std::ofstream results("examples/mobilessd/result.txt",ios::app);
-	  if (results.is_open())
-	  {
-		  results << "Baseline 32bit float: " << test_score_baseline_<< '\n';
-		  results << "Dynamic fixed point net:"<< '\n';
-		  results << bw_conv_params_ << "bit CONV weights,"<< '\n';
-		  results << bw_fc_params_ << "bit FC weights,"<< '\n';
-		  results << bw_out_ << "bit layer activations:"<< '\n';
-		  results << "mAP: " << accuracy << '\n' << '\n' << '\n';
-		  results.close();
-	  }
+	std::ofstream results("examples/mobilessd/result.txt",ios::app);
+	if (results.is_open())
+	{
+	  results << "Baseline 32bit float: " << test_score_baseline_<< '\n';
+	  results << "Dynamic fixed point net:"<< iterations_ <<'\n';
+	  results << bw_conv_params_ << "bit CONV weights,"<< '\n';
+	  results << bw_fc_params_ << "bit FC weights,"<< '\n';
+	  results << bw_out_ << "bit layer activations:"<< '\n';
+	  results << "mAP: " << accuracy << '\n' << '\n' << '\n';
+	  results.close();
+	}
 
 }
 void Quantization::Quantize2int8(){
 
-		Net<float>* net_val = new Net<float>(model_, caffe::TEST);
-		net_val->CopyTrainedLayersFrom(weights_);
-		RunForwardBatches(this->iterations_, net_val, &test_score_baseline_);;
-		delete net_val;
+	Net<float>* net_val = new Net<float>(model_, caffe::TEST);
+	net_val->CopyTrainedLayersFrom(weights_);
+	RunForwardBatches(this->iterations_, net_val, &test_score_baseline_);;
+	delete net_val;
 
-	  NetParameter param;
-	  float accuracy = 0;
-	  Net<float>* net_test;
-	  caffe::ReadNetParamsFromTextFileOrDie(model_, &param);
+	NetParameter param;
+	float accuracy = 0;
+	Net<float>* net_test;
+	caffe::ReadNetParamsFromTextFileOrDie(model_, &param);
 
+	param.mutable_state()->set_phase(caffe::TEST);
 
-	  param.mutable_state()->set_phase(caffe::TEST);
+	std::map<std::string, std::vector<float> > blob_int8scale_table;
+	std::map<std::string, std::vector<float> > weight_int8scale_table;
+	const char* filepath = this->calibration_tabel.c_str();
+	bool a = read_int8scale_table(filepath, blob_int8scale_table, weight_int8scale_table);
+	if(!a)
+	{
+	  fprintf(stderr, "read_int8scale_table failed\n");
+	}
 
-	  std::map<std::string, std::vector<float> > blob_int8scale_table;
-	  std::map<std::string, std::vector<float> > weight_int8scale_table;
-	  const char* filepath = this->calibration_tabel.c_str();
-	  bool a = read_int8scale_table(filepath, blob_int8scale_table, weight_int8scale_table);
-	  if(!a)
-	  {
-          fprintf(stderr, "read_int8scale_table failed\n");
-	  }
+	EditNetDescription2int8(&param, blob_int8scale_table, weight_int8scale_table);
 
-	  EditNetDescription2int8(&param, blob_int8scale_table, weight_int8scale_table);
+	net_test = new Net<float>(param);
+	net_test->CopyTrainedLayersFrom(weights_);
+	RunForwardBatches(iterations_, net_test, &accuracy);
+	delete net_test;
+	param.release_state();
 
-	  net_test = new Net<float>(param);
-	  net_test->CopyTrainedLayersFrom(weights_);
-	  RunForwardBatches(iterations_, net_test, &accuracy);
-	  delete net_test;
-	  param.release_state();
+	WriteProtoToTextFile(param, model_quantized_);
+	LOG(INFO) << "Baseline 32bit float: " << test_score_baseline_;
+	LOG(INFO) << "mAP: " << accuracy;
 
-	  WriteProtoToTextFile(param, model_quantized_);
-	  LOG(INFO) << "Baseline 32bit float: " << test_score_baseline_;
-	  LOG(INFO) << "mAP: " << accuracy;
-
-	  std::ofstream results("examples/mobilessd/result.txt",ios::app);
-	  if (results.is_open())
-	  {
-		  results << "Baseline 32bit float: " << test_score_baseline_<< '\n';
-		  results << "mAP: " << accuracy << '\n' << '\n' << '\n';
-		  results.close();
-	  }
+	std::ofstream results("examples/mobilessd/result.txt",ios::app);
+	if (results.is_open())
+	{
+		if(this->calibration_tabel.find("group") != string::npos)
+			results << "int8_group_" << iterations_*8 << "\n";
+		else
+			results << "int8_" << iterations_*8 << "\n";
+		results << "Baseline 32bit float: " << test_score_baseline_<< '\n';
+		results << "mAP: " << accuracy << '\n' << '\n' << '\n';
+		results.close();
+	}
 }
 
 void Quantization::Quantize2MiniFloat() {
@@ -551,7 +554,11 @@ void Quantization::EditNetDescription2int8(NetParameter* param,
 		  blob_int8scale = blob_int8scale_table[param_layer->name()];
 		}
 
-        param_layer->mutable_quantization_param()->set_weight_scale( weight_int8scale[0]);
+	    for(unsigned int i = 0; i < weight_int8scale.size(); i++)
+	    {
+	    	param_layer->mutable_quantization_param()->add_weight_scale(weight_int8scale[i]);
+	    }
+
         param_layer->mutable_quantization_param()->set_data_scale(blob_int8scale[0]);
         param_layer->mutable_quantization_param()->set_int8_term(true);
 
