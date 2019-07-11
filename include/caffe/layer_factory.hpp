@@ -80,6 +80,9 @@ class LayerRegistry {
     CreatorRegistry& registry = Registry();
     CHECK_EQ(registry.count(type), 1) << "Unknown layer type: " << type
         << " (known types: " << LayerTypeListString() << ")";
+//    if( type == "Python"){
+//    	return registry[type](param);
+//    }
     return registry[type](param);
   }
 

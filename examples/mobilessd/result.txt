@@ -489,3 +489,8 @@ Baseline 32bit float: 0.668219
 mAP: 0.653749
 
 
+int8_group_8
+Baseline 32bit float: 0.322727
+mAP: 0.313636
+
+
