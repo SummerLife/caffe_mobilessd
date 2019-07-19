@@ -124,6 +124,11 @@ Please cite SSD in your publications if it helps your research:
 
 5. To train on other dataset, please refer to data/OTHERDATASET for more details. We currently add support for COCO and ILSVRC2016. We recommend using [`examples/ssd.ipynb`](https://github.com/weiliu89/caffe/blob/ssd/examples/ssd_detect.ipynb) to check whether the new dataset is prepared correctly.
 
+### command
+1. int16 quantize --model=examples/mobilessd/no_bn.prototxt --weights=examples/mobilessd/no_bn.caffemodel --model_quantized=examples/mobilessd/quantized_no_bn.prototxt  --trimming_mode=dynamic_fixed_point --iterations=1 --error_margin=60
+2. quantize --model=examples/mobilessd/no_bn.prototxt --weights=examples/mobilessd/no_bn.caffemodel --model_quantized=examples/mobilessd/quantized_no_bn_int8.prototxt  --trimming_mode=dynamic_fixed_point --iterations=1 --error_margin=60 --calibration_tabel=test/group_no_bn.table
+3. 
+
 ### Models
 We have provided the latest models that are trained from different datasets. To help reproduce the results in [Table 6](https://arxiv.org/pdf/1512.02325v4.pdf), most models contain a pretrained `.caffemodel` file, many `.prototxt` files, and python scripts.
 
@@ -141,3 +146,4 @@ We have provided the latest models that are trained from different datasets. To 
    * trainval1: [SSD300*](https://drive.google.com/open?id=0BzKzrI_SkD1_a2NKQ2d1d043VXM), [SSD500](https://drive.google.com/open?id=0BzKzrI_SkD1_X2ZCLVgwLTgzaTQ)
 
 <sup>[1]</sup>We use [`examples/convert_model.ipynb`](https://github.com/weiliu89/caffe/blob/ssd/examples/convert_model.ipynb) to extract a VOC model from a pretrained COCO model.
+

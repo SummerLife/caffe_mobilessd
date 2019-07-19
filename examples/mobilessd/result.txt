@@ -494,3 +494,24 @@ Baseline 32bit float: 0.322727
 mAP: 0.313636
 
 
+int8_group_8
+Baseline 32bit float: 0.322727
+mAP: 0.313636
+
+
+Baseline 32bit float: 0.322727
+Dynamic fixed point net:1
+16bit CONV weights,
+16bit FC weights,
+16bit layer activations:
+mAP: 0.322727
+
+
+Baseline 32bit float: 4.59135e-41
+Dynamic fixed point net:1
+16bit CONV weights,
+16bit FC weights,
+16bit layer activations:
+mAP: -9.40562e-27
+
+

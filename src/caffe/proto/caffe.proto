@@ -543,6 +543,11 @@ message LayerParameter {
   optional VideoDataParameter video_data_param = 207;
   optional WindowDataParameter window_data_param = 129;
   optional QuantizationParameter quantization_param = 148;
+  optional UpsampleParameter upsample_param = 149;
+}
+
+message UpsampleParameter {
+  optional int32 scale = 1 [default = 1];
 }
 
 // Message for layers with reduced word with arithmetic

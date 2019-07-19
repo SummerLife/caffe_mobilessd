@@ -178,7 +178,7 @@ void Quantization::RunForwardBatches(const int iterations,
   *accuracy = test_score[score_number] / iterations;
 }
 */
-
+// prase result of mobilenet ssd
 void Quantization::RunForwardBatches(const int iterations,
       Net<float>* caffe_net, float* accuracy, const bool do_stats,
       const int score_number) {
@@ -216,6 +216,7 @@ void Quantization::RunForwardBatches(const int iterations,
     if (1) {
       loss += iter_loss;
     }
+
     for (int j = 0; j < result.size(); ++j) {
       CHECK_EQ(result[j]->width(), 5);
       const float* result_vec = result[j]->cpu_data();
